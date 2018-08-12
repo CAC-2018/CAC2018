@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="250.0" layoutY="86.0" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <ChoiceBox prefWidth="150.0">
+               <VBox.margin>
+                  <Insets bottom="15.0" top="15.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </ChoiceBox>
+            <ChoiceBox prefWidth="150.0">
+               <VBox.margin>
+                  <Insets bottom="15.0" top="15.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </ChoiceBox>
+            <ChoiceBox prefWidth="150.0">
+               <VBox.margin>
+                  <Insets bottom="15.0" top="15.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </ChoiceBox>
+            <Button alignment="CENTER" mnemonicParsing="false" text="Play">
+               <padding>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="15.0" top="15.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </VBox>
+      <Label layoutX="201.0" layoutY="38.0" text="Character Creation">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button alignment="CENTER" layoutX="541.0" layoutY="14.0" mnemonicParsing="false" text="Help">
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </padding>
+      </Button>
+   </children>
+</AnchorPane>
