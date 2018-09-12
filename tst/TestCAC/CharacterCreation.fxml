@@ -7,12 +7,38 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" layoutX="250.0" layoutY="86.0" prefHeight="200.0" prefWidth="100.0">
+      <VBox fx:id="vboxBox" alignment="CENTER" layoutX="220.0" layoutY="86.0" prefHeight="222.0" prefWidth="160.0">
          <children>
-            <ChoiceBox prefWidth="150.0">
+            <ChoiceBox fx:id="cbProfession" prefHeight="25.0" prefWidth="160.0" value="Office Administration">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Office Administration" />
+                     <String fx:value="Driver" />
+                     <String fx:value="Auto Tech" />
+                     <String fx:value="Welder" />
+                     <String fx:value="Lab Technician" />
+                     <String fx:value="Social Worker" />
+                     <String fx:value="Electrician" />
+                     <String fx:value="Teacher" />
+                     <String fx:value="Performing Arts" />
+                     <String fx:value="Construction Foreman" />
+                     <String fx:value="Law Enforcement" />
+                     <String fx:value="Soldier" />
+                     <String fx:value="Dental Hygenist" />
+                     <String fx:value="Professor" />
+                     <String fx:value="Nurse" />
+                     <String fx:value="Sportsperson" />
+                     <String fx:value="Scientist" />
+                     <String fx:value="Engineer" />
+                     <String fx:value="Lawyer" />
+                     <String fx:value="Doctor" />
+                  </FXCollections>
+               </items>
+               <tooltip><Tooltip text="Profession" /></tooltip>
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
@@ -20,7 +46,23 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <ChoiceBox prefWidth="150.0">
+            <ChoiceBox fx:id="cbHousing" prefHeight="25.0" prefWidth="160.0" value="160,000.00">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="160,000.00" />
+                     <String fx:value="205,000.00" />
+                     <String fx:value="235,000.00" />
+                     <String fx:value="270,000.00" />
+                     <String fx:value="300,000.00" />
+                     <String fx:value="320,000.00" />
+                     <String fx:value="345,000.00" />
+                     <String fx:value="365,000.00" />
+                     <String fx:value="385,000.00" />
+                     <String fx:value="410,000.00" />
+                     <String fx:value="430,000.00" />
+                  </FXCollections>
+               </items>
+               <tooltip><Tooltip text="House Value ($)" /></tooltip>
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
@@ -28,7 +70,21 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <ChoiceBox prefWidth="150.0">
+            <ChoiceBox fx:id="cbDependants" prefHeight="25.0" prefWidth="160.0" value="0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="0" />
+                     <String fx:value="1" />
+                     <String fx:value="2" />
+                     <String fx:value="3" />
+                     <String fx:value="4" />
+                     <String fx:value="5" />
+                     <String fx:value="6" />
+                     <String fx:value="7" />
+                     <String fx:value="8" />
+                  </FXCollections>
+               </items>
+               <tooltip><Tooltip text="Number of Dependants" /></tooltip>
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
@@ -36,7 +92,7 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <Button alignment="CENTER" mnemonicParsing="false" text="Play">
+            <Button fx:id="btnPlay" alignment="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Play">
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
@@ -49,12 +105,12 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </VBox>
-      <Label layoutX="201.0" layoutY="38.0" text="Character Creation">
+      <Label fx:id="lblTitle" layoutX="177.0" layoutY="41.0" text="Character Creation">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold" size="28.0" />
          </font>
       </Label>
-      <Button alignment="CENTER" layoutX="541.0" layoutY="14.0" mnemonicParsing="false" text="Help">
+      <Button fx:id="btnHelp" alignment="CENTER" layoutX="541.0" layoutY="14.0" mnemonicParsing="false" text="Help">
          <padding>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
          </padding>
