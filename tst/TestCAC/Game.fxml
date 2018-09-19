@@ -8,82 +8,81 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane layoutX="4.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <left>
-            <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER">
+            <Button fx:id="btnHistBuy" mnemonicParsing="false" prefHeight="180.0" prefWidth="100.0" text="Purchase History" wrapText="true" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="10.0" right="10.0" />
                </BorderPane.margin>
                <padding>
-                  <Insets bottom="80.0" left="20.0" right="20.0" top="80.0" />
+                  <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
                </padding>
             </Button>
          </left>
          <right>
-            <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER">
+            <Button fx:id="btnAvailBuy" mnemonicParsing="false" prefHeight="180.0" prefWidth="100.0" text="Available Purchases" wrapText="true" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="10.0" right="10.0" />
                </BorderPane.margin>
                <padding>
-                  <Insets bottom="80.0" left="20.0" right="20.0" top="80.0" />
+                  <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
                </padding>
             </Button>
          </right>
          <bottom>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox fx:id="hbxLower" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnBalance" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Current Balance">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
+                        <Insets left="10.0" right="20.0" top="10.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets bottom="30.0" left="80.0" right="80.0" top="30.0" />
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                   </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnWellBeing" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Current Well-Being">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
+                        <Insets top="10.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets bottom="30.0" left="80.0" right="80.0" top="30.0" />
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                   </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnDebtsLoans" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Debts/Loans">
                      <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
+                        <Insets left="20.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets bottom="30.0" left="80.0" right="80.0" top="30.0" />
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                   </Button>
                </children>
             </HBox>
          </bottom>
          <top>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox fx:id="hbxUpper" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnMenu" mnemonicParsing="false" prefWidth="70.0" text="Menu">
                      <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <padding>
                         <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
                      </padding>
                   </Button>
-                  <Button mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnOverhead" mnemonicParsing="false" prefHeight="77.0" prefWidth="400.0" text="Overhead Expenses">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets bottom="30.0" left="200.0" right="200.0" top="30.0" />
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                      </padding>
                   </Button>
-                  <Button mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnHelp" mnemonicParsing="false" prefWidth="70.0" text="Help">
                      <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                      <padding>
                         <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
@@ -93,22 +92,22 @@
             </HBox>
          </top>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="vbxCenter" prefHeight="200.0" prefWidth="410.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Week X">
+                  <Label fx:id="lblWeek" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="120.0" text="Week X">
                      <font>
                         <Font size="24.0" />
                      </font>
                      <VBox.margin>
-                        <Insets left="150.0" right="150.0" />
+                        <Insets left="120.0" right="120.0" />
                      </VBox.margin>
                   </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Button">
+                  <Button fx:id="btnActDeci" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="328.0" text="Activities/Decisions">
                      <VBox.margin>
                         <Insets left="25.0" right="25.0" top="100.0" />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="20.0" left="160.0" right="160.0" top="20.0" />
+                        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
                      </padding>
                   </Button>
                </children>

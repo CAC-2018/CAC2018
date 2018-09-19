@@ -10,24 +10,24 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="291.0" layoutY="58.0" text="Login">
+      <Label fx:id="lblTitle" layoutX="291.0" layoutY="58.0" text="Login">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" layoutX="270.0" layoutY="106.0" prefHeight="200.0" prefWidth="100.0">
+      <VBox fx:id="vbxBox" alignment="CENTER" layoutX="245.0" layoutY="106.0" prefHeight="200.0" prefWidth="150.0">
          <children>
-            <TextField>
+            <TextField fx:id="txtName" promptText="Username">
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
             </TextField>
-            <TextField>
+            <TextField fx:id="txtPass" promptText="Password">
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
             </TextField>
-            <Button alignment="CENTER" mnemonicParsing="false" text="Create">
+            <Button fx:id="btnLogin" alignment="CENTER" mnemonicParsing="false" text="Login">
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
@@ -40,7 +40,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </VBox>
-      <Button alignment="CENTER" layoutX="541.0" layoutY="14.0" mnemonicParsing="false" text="Help">
+      <Button fx:id="btnHelp" alignment="CENTER" layoutX="541.0" layoutY="14.0" mnemonicParsing="false" text="Help">
          <padding>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
          </padding>
