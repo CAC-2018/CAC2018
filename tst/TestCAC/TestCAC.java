@@ -26,10 +26,6 @@ public class TestCAC extends Application {
     public void start(Stage stage) throws Exception {
         UiMan.startUI(stage);
     }
-    
-    public void switchToGame(){
-        
-    }
 
     /**
      * @param args the command line arguments
