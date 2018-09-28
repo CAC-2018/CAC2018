@@ -20,14 +20,11 @@ import javafx.stage.Stage;
  */
 public class TestCAC extends Application {
     
+    UIManager UiMan = new UIManager();
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
+        UiMan.startUI(stage);
     }
 
     /**
