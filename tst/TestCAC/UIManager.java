@@ -35,6 +35,9 @@ public class UIManager implements Initializable {
         stage.show();
     }
     
+    public void switchToGame(){
+        
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
