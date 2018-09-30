@@ -31,7 +31,10 @@ public class UIManager implements Initializable {
     private Button btnLogin;
     
     @FXML
-    private Button btnCreate;
+    private Button btnCreateC;
+    
+    @FXML
+    private Button btnPlay;
     
     Stage current = new Stage();
     
@@ -69,9 +72,32 @@ public class UIManager implements Initializable {
     @FXML
     private void handleBackCNUButtonAction(ActionEvent event) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("StartScreen.fxml"));
-        btnCreate.getScene().setRoot(root);
+        btnCreateC.getScene().setRoot(root);
     }
     
+    @FXML
+    private void handleLoginButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("Game.fxml"));
+        btnLogin.getScene().setRoot(root);
+    }
+    
+    @FXML
+    private void handleCreateCButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("CharacterCreation.fxml"));
+        btnCreateC.getScene().setRoot(root);
+    }
+    
+    @FXML
+    private void handleBackCCButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("CreateUser.fxml"));
+        btnPlay.getScene().setRoot(root);
+    }
+    
+    @FXML
+    private void handlePlayButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("Game.fxml"));
+        btnPlay.getScene().setRoot(root);
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
