@@ -25,6 +25,7 @@ public class TestCAC extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         UiMan.startUI(stage);
+        GameManager.initJobs();
     }
 
     /**

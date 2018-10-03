@@ -17,12 +17,12 @@
       </Label>
       <VBox fx:id="vbxBox" alignment="CENTER" layoutX="245.0" layoutY="106.0" prefHeight="200.0" prefWidth="150.0">
          <children>
-            <TextField fx:id="txtName" promptText="Username">
+            <TextField fx:id="txtNameL" promptText="Username">
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
             </TextField>
-            <TextField fx:id="txtPass" promptText="Password">
+            <TextField fx:id="txtPassL" promptText="Password">
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>

@@ -13,7 +13,7 @@
    <children>
       <VBox fx:id="vboxBox" alignment="CENTER" layoutX="220.0" layoutY="86.0" prefHeight="222.0" prefWidth="160.0">
          <children>
-            <ChoiceBox fx:id="cbProfession" prefHeight="25.0" prefWidth="160.0" value="Office Administration">
+            <ChoiceBox fx:id="cbProfession" onAction="#handleJobChoiceAction" prefHeight="25.0" prefWidth="160.0" value="Office Administration">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Office Administration" />
@@ -46,23 +46,23 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <ChoiceBox fx:id="cbHousing" prefHeight="25.0" prefWidth="160.0" value="160,000.00">
+            <RadioButton fx:id="radHouse" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleHouseRadAction" selected="true" text="House">
+               <VBox.margin>
+                  <Insets right="23.0" />
+               </VBox.margin>
+               <toggleGroup>
+                  <ToggleGroup fx:id="housing" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="radApart" selected="false" mnemonicParsing="false" onAction="#handleApartRadAction" text="Apartment" toggleGroup="$housing" />
+            <ChoiceBox fx:id="cbHousing" onAction="#handleHouseChoiceAction" prefHeight="25.0" prefWidth="160.0" value=" $81000">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="160,000.00" />
-                     <String fx:value="205,000.00" />
-                     <String fx:value="235,000.00" />
-                     <String fx:value="270,000.00" />
-                     <String fx:value="300,000.00" />
-                     <String fx:value="320,000.00" />
-                     <String fx:value="345,000.00" />
-                     <String fx:value="365,000.00" />
-                     <String fx:value="385,000.00" />
-                     <String fx:value="410,000.00" />
-                     <String fx:value="430,000.00" />
+                     <String fx:value=" $81000" />
+                     <String fx:value=" $101500" />
                   </FXCollections>
                </items>
-               <tooltip><Tooltip text="House Value ($)" /></tooltip>
+               <tooltip><Tooltip fx:id="tltHousing" text="House Value ($)" /></tooltip>
                <VBox.margin>
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
@@ -75,10 +75,6 @@
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="0" />
                      <String fx:value="1" />
-                     <String fx:value="2" />
-                     <String fx:value="3" />
-                     <String fx:value="4" />
-                     <String fx:value="5" />
                   </FXCollections>
                </items>
                <tooltip><Tooltip text="Number of Dependants" /></tooltip>
@@ -89,7 +85,7 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <Button fx:id="btnPlay" alignment="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Play" onAction="#handlePlayButtonAction">
+            <Button fx:id="btnPlay" alignment="CENTER" mnemonicParsing="false" onAction="#handlePlayButtonAction" prefHeight="27.0" prefWidth="60.0" text="Play">
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
@@ -113,5 +109,8 @@
          </padding>
       </Button>
       <Button fx:id="btnBack" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackCCButtonAction" text="Back" />
+      <Label fx:id="lblMort" layoutX="387.0" layoutY="183.0" text="Mortgage: $400" />
+      <Label fx:id="lblIns" layoutX="387.0" layoutY="200.0" text="Home Insurance: $28" />
+      <Label fx:id="lblSal" layoutX="387.0" layoutY="105.0" text="Yearly Salary: $40000" />
    </children>
 </AnchorPane>
