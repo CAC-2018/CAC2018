@@ -18,6 +18,16 @@ public class GameManager {
     public static int homeIns = 0;
     public static int[] deps;
     
+    public static int gross;
+    public static int net;
+    public static int fixed;
+    public static int savings;
+    public static int score;
+    public static int wellB;
+    public static int mortRent;
+    public static int tax;
+    public static Boolean haveHouse;
+    
     public static void initJobs(){
         jobs = new String[]{"Office Administration","Driver","Auto Tech","Welder","Lab Technician","Social Worker",
             "Electrician","Teacher","Performing Arts","Construction Foreman","Law Enforcement","Soldier",
@@ -36,6 +46,47 @@ public class GameManager {
             {500,600,700},{500,600,700},{500,600,700},{600,700,800},{600,700,800},{600,700,800},
             {700,800,900},{700,800,900},{800,900,1000,1100},{800,900,1000,1100},{800,900,1000,1100,1200},
             {1000,1100,1200,1300,1400},{1300,1400,1500,1600,1700,1800}};
+    }
+    
+    public static void initGame(int ind, Boolean h, int hou, int dep){
+        gross = Math.round((salaries[ind])/12);
+        haveHouse = h;
+        net = gross - 1100;
+        if (haveHouse){
+            mortIns(houses[ind][hou]);
+            mortRent = mort;
+            net -= mort + homeIns;
+        }
+        else{
+            mortRent = apartments[ind][hou];
+            net -= mortRent;
+        }
+        tax(salaries[ind]);
+        net -= tax;
+        fixed = gross - net;
+        savings = 0;
+        score = 0;
+        wellB = 0;
+    }
+    
+    public static int tax (int inc){
+        switch (inc){
+            case 40000: tax = 63;break;
+            case 45000: tax = 96;break;
+            case 50000: tax = 129;break;
+            case 55000: tax = 171;break;
+            case 60000: tax = 213;break;
+            case 65000: tax = 267;break;
+            case 70000: tax = 321;break;
+            case 75000: tax = 375;break;
+            case 85000: tax = 500;break;
+            case 90000: tax = 563;break;
+            case 100000: tax = 688;break;
+            case 125000: tax = 1104;break;
+            case 200000: tax = 2563;break;
+            default: tax = 0; break;
+        }
+        return tax;
     }
     
     public static void mortIns(int house){

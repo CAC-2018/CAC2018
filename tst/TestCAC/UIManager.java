@@ -21,27 +21,16 @@ import javafx.stage.*;
 import javafx.stage.Stage;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resources;
 
 /**
  *
  * @author nikhi
  */
 public class UIManager implements Initializable {
-    
-    @FXML
-    private TextField txtName;
-    
-    @FXML
-    private TextField txtNameL;
-    
-    @FXML
-    private TextField txtPass;
-    
-    @FXML
-    private TextField txtRePass;
-    
-    @FXML
-    private TextField txtPassL;
     
     @FXML
     private Button btnReturn;
@@ -71,6 +60,21 @@ public class UIManager implements Initializable {
     private Tooltip tltHousing;
     
     @FXML
+    private TextField txtName;
+    
+    @FXML
+    private TextField txtNameL;
+    
+    @FXML
+    private TextField txtPass;
+    
+    @FXML
+    private TextField txtRePass;
+    
+    @FXML
+    private TextField txtPassL;
+    
+    @FXML
     private Label lblSal;
     
     @FXML
@@ -78,6 +82,42 @@ public class UIManager implements Initializable {
     
     @FXML
     private Label lblIns;
+    
+    @FXML
+    private Label lblMonth;
+    
+    @FXML
+    private Label lblGross;
+    
+    @FXML
+    private Label lblMCosts;
+    
+    @FXML
+    private Label lblNet;
+    
+    @FXML
+    private Label lblEssentials;
+    
+    @FXML
+    private Label lblMortRent;
+    
+    @FXML
+    private Label lblHIns;
+    
+    @FXML
+    private Label lblMeds;
+    
+    @FXML
+    private Label lblTax;
+    
+    @FXML
+    private Label lblSavings;
+    
+    @FXML
+    private Label lblScore;
+    
+    @FXML
+    private Label lblHappiness;
     
     Stage current = new Stage();
     
@@ -128,8 +168,8 @@ public class UIManager implements Initializable {
     
     @FXML
     private void handleCreateCButtonAction(ActionEvent event) throws Exception{
-        if ((txtPass.getText() == txtRePass.getText())&&(txtPass.getText().length()>6)&&
-                (txtName.getText().length()>6)&&DataManager.newLog(txtName.getText(), txtPass.getText())){
+        if ((txtPass.getText().equals(txtRePass.getText()))&&(txtPass.getLength()>6)&&
+                (txtName.getLength()>6)&&DataManager.newLog(txtName.getText(), txtPass.getText())){
             Parent root = FXMLLoader.load(getClass().getResource("CharacterCreation.fxml"));
             btnCreateC.getScene().setRoot(root);
         }
@@ -145,23 +185,25 @@ public class UIManager implements Initializable {
     private void handlePlayButtonAction(ActionEvent event) throws Exception{
         try{
             int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
-            int value = Integer.parseInt(((String)cbHousing.getValue()).trim().substring(1));
+            int value = Integer.parseInt(((String)cbHousing.getValue()).trim().substring(1)); 
             int housing = 0;
             Boolean house = false;        
             if(radHouse.isSelected()){
                 house = true;
-                housing = java.util.Arrays.asList(GameManager.houses[index]).indexOf(value);
+                housing = getArrayIndex(GameManager.houses[index],value);
             }
             else{
-                housing = java.util.Arrays.asList(GameManager.apartments[index]).indexOf(value);
+                housing = getArrayIndex(GameManager.apartments[index],value);
             }
             int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
             DataManager.initGameData(index, house, housing, deps);
+            GameManager.initGame(index, house, housing, deps);
             Parent root = FXMLLoader.load(getClass().getResource("Game.fxml"));
             btnPlay.getScene().setRoot(root);
         }
         catch (Exception ex){
             System.out.println(ex.toString()+" @handlePlayButtonAction,UIManager");
+            System.out.println(ex.getCause());
         }
     }
     
@@ -249,9 +291,43 @@ public class UIManager implements Initializable {
         }
     }
     
+    private void firstLoad() throws InterruptedException{
+        lblGross.setText("Gross Monthly Income: $"+Integer.toString(GameManager.gross));
+        lblMCosts.setText("Monthly Costs: $"+Integer.toString(GameManager.fixed));
+        lblNet.setText("Net Monthly Income: $"+Integer.toString(GameManager.net));
+        lblTax.setText("Taxes: $"+Integer.toString(GameManager.tax));
+        if (GameManager.haveHouse){
+            lblMortRent.setText("Mortgage: $"+Integer.toString(GameManager.mortRent));
+            lblHIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns));
+        }
+        else{
+            lblMortRent.setText("Rent: $"+Integer.toString(GameManager.mortRent));
+            lblHIns.setText("Home Insurance: N/A");
+        }
+    }
+    
+    private int getArrayIndex(int[] arr,int value) {
+
+        int k=0;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]==value){
+                k=i;
+                break;
+            }
+        }
+    return k;
+}
+    
+    @FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (lblGross != null){
+            try {
+                firstLoad();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
 }

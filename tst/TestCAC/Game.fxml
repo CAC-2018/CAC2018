@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -10,109 +11,72 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TestCAC.UIManager">
    <children>
-      <BorderPane layoutX="4.0" layoutY="4.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
-         <left>
-            <Button fx:id="btnHistBuy" mnemonicParsing="false" prefHeight="180.0" prefWidth="100.0" text="Purchase History" wrapText="true" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </BorderPane.margin>
-               <padding>
-                  <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
-               </padding>
-            </Button>
-         </left>
-         <right>
-            <Button fx:id="btnAvailBuy" mnemonicParsing="false" prefHeight="180.0" prefWidth="100.0" text="Available Purchases" wrapText="true" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets left="10.0" right="10.0" />
-               </BorderPane.margin>
-               <padding>
-                  <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
-               </padding>
-            </Button>
-         </right>
-         <bottom>
-            <HBox fx:id="hbxLower" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <GridPane layoutX="15.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="373.0" prefWidth="571.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="lblMonth" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" text="Month 1: January" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblScore" alignment="CENTER" text="Score: 0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Button fx:id="lblHelpG" mnemonicParsing="false" text="Help" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+            <Button fx:id="lblMenuG" mnemonicParsing="false" text="Menu" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+            <Label fx:id="lblSavings" text="Savings: $0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Label fx:id="lblHappiness" text="Well Being Value: 0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Button fx:id="btnHist" alignment="CENTER" mnemonicParsing="false" text="View Spending History" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="btnNext" mnemonicParsing="false" text="Next Month" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="btnDescisions" mnemonicParsing="false" text="Monthly Spending Descisions" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="btnBalance" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Current Balance">
-                     <HBox.margin>
-                        <Insets left="10.0" right="20.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="btnWellBeing" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Current Well-Being">
-                     <HBox.margin>
-                        <Insets top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="btnDebtsLoans" alignment="CENTER" mnemonicParsing="false" prefHeight="77.0" prefWidth="180.0" text="Debts/Loans">
-                     <HBox.margin>
-                        <Insets left="20.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                     </padding>
-                  </Button>
-               </children>
-            </HBox>
-         </bottom>
-         <top>
-            <HBox fx:id="hbxUpper" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="btnMenu" mnemonicParsing="false" prefWidth="70.0" text="Menu">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="btnOverhead" mnemonicParsing="false" prefHeight="77.0" prefWidth="400.0" text="Overhead Expenses">
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="btnHelp" mnemonicParsing="false" prefWidth="70.0" text="Help">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                     <padding>
-                        <Insets bottom="30.0" left="10.0" right="10.0" top="30.0" />
-                     </padding>
-                  </Button>
-               </children>
-            </HBox>
-         </top>
-         <center>
-            <VBox fx:id="vbxCenter" prefHeight="200.0" prefWidth="410.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label fx:id="lblWeek" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="120.0" text="Week X">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="120.0" right="120.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Button fx:id="btnActDeci" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="328.0" text="Activities/Decisions">
-                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="100.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
-                     </padding>
-                  </Button>
+                  <Label text="Monthly Income" />
+                  <Label fx:id="lblGross" text="Gross Monthly Salary: $0" wrapText="true" />
+                  <Label fx:id="lblMCosts" text="Monthly Costs: $0" wrapText="true" />
+                  <Label fx:id="lblNet" text="Net Monthly Salary: $0" wrapText="true" />
                </children>
             </VBox>
-         </center>
-      </BorderPane>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Monthly Costs" />
+                  <Label fx:id="lblEssentials" text="Food, Clothing, &amp; Essentials: $800" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblMortRent" text="Mortgage/Rent: $0" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblHIns" text="Home Insurance: $0" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblMeds" text="Medical: $300">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblTax" text="Taxes: $0">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
