@@ -119,6 +119,31 @@ public class UIManager implements Initializable {
     @FXML
     private Label lblHappiness;
     
+    @FXML
+    private AnchorPane ancDesc;
+    
+    @FXML
+    private Label lblPrompt;
+    
+    @FXML
+    private Button btn1;
+    
+    @FXML
+    private Button btn2;
+    
+    @FXML
+    private Button btn3;
+    
+    @FXML
+    private Button btn4;
+    
+    @FXML
+    private Button btn5;
+    
+    private Question currentQ;
+    
+    private int qNum;
+    
     Stage current = new Stage();
     
     public void startUI(Stage stage) throws Exception {
@@ -306,6 +331,263 @@ public class UIManager implements Initializable {
         }
     }
     
+    @FXML
+    private void handleHistButtonAction(ActionEvent event) throws Exception{
+
+    }
+    
+    @FXML
+    private void handleNextButtonAction(ActionEvent event) throws Exception{
+        if(GameManager.monthDone){
+            GameManager.savings+= GameManager.net;
+            lblSavings.setText("$"+Integer.toString(GameManager.savings));
+            GameManager.score = GameManager.savings*GameManager.wellB;
+            lblScore.setText(Integer.toString(GameManager.score));
+            GameManager.month+=1;
+            GameManager.monthDone = false;
+            GameManager.setMonthly();
+            qNum = 0;
+            switch (GameManager.month){
+                case 1: lblMonth.setText("Month 1: January");break;
+                case 2: lblMonth.setText("Month 2: February");break;
+                case 3: lblMonth.setText("Month 3: March");break;
+                case 4: lblMonth.setText("Month 4: April");break;
+                case 5: lblMonth.setText("Month 5: May");break;
+                case 6: lblMonth.setText("Month 6: June");break;
+                case 7: lblMonth.setText("Month 7: July");break;
+                case 8: lblMonth.setText("Month 8: August");break;
+                case 9: lblMonth.setText("Month 9: September");break;
+                case 10: lblMonth.setText("Month 10: October");break;
+                case 11: lblMonth.setText("Month 11: November");break;
+                case 12: lblMonth.setText("Month 12: December");break;
+            }
+        }
+    }
+    
+    @FXML
+    private void handle1ButtonAction(ActionEvent event) throws Exception{
+        int resps = GameManager.monthly.get(qNum).answers.length;
+        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+            if(GameManager.wellB>10){
+                GameManager.wellB-=10;
+            }
+            else{
+                GameManager.wellB = 0;
+            }
+        }
+        else{
+            switch (resps){
+                case 3: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
+                case 4: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
+                case 5: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
+            }
+        }
+        update();
+        if (qNum == (GameManager.monthly.size()-1)){
+            GameManager.monthDone = true;
+            if (ancDesc != null){
+                Stage stage = (Stage) ancDesc.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else{
+            runQuestions();
+        }
+    }
+
+    @FXML
+    private void handle2ButtonAction(ActionEvent event) throws Exception{
+        int resps = GameManager.monthly.get(qNum).answers.length;
+        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+            if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+                if(GameManager.wellB>10){
+                    GameManager.wellB-=10;
+                }
+                else{
+                    GameManager.wellB = 0;
+                }
+            }
+        }
+        else{
+           switch (resps){
+                case 2: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
+                case 4: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
+                case 5: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
+            } 
+        }        
+        update();
+        if (qNum == (GameManager.monthly.size()-1)){
+            GameManager.monthDone = true;
+            if (ancDesc != null){
+                Stage stage = (Stage) ancDesc.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else{
+            runQuestions();
+        }
+    }
+
+    @FXML
+    private void handle3ButtonAction(ActionEvent event) throws Exception{
+        int resps = GameManager.monthly.get(qNum).answers.length;
+        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+            if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+                if(GameManager.wellB>10){
+                    GameManager.wellB-=10;
+                }
+                else{
+                    GameManager.wellB = 0;
+                }
+            }
+        }
+        else{
+           switch (resps){
+                case 3: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
+                case 5: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
+            } 
+        }        
+        update();
+        if (qNum == (GameManager.monthly.size()-1)){
+            GameManager.monthDone = true;
+            if (ancDesc != null){
+                Stage stage = (Stage) ancDesc.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else{
+            runQuestions();
+        }
+    }
+
+    @FXML
+    private void handle4ButtonAction(ActionEvent event) throws Exception{
+        int resps = GameManager.monthly.get(qNum).answers.length;
+        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+            if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+                if(GameManager.wellB>10){
+                    GameManager.wellB-=10;
+                }
+                else{
+                    GameManager.wellB = 0;
+                }
+            }
+        }
+        else{
+            switch (resps){
+                case 2: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
+                case 4: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
+                case 5: if(GameManager.monthly.get(qNum).cost[3]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(3);}break;
+            }
+        }        
+        update();
+        if (qNum == (GameManager.monthly.size()-1)){
+            GameManager.monthDone = true;
+            if (ancDesc != null){
+                Stage stage = (Stage) ancDesc.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else{
+            runQuestions();
+        }
+    }
+
+    @FXML
+    private void handle5ButtonAction(ActionEvent event) throws Exception{
+        int resps = GameManager.monthly.get(qNum).answers.length;
+        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+            if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
+                if(GameManager.wellB>10){
+                    GameManager.wellB-=10;
+                }
+                else{
+                    GameManager.wellB = 0;
+                }
+            }
+        }
+        else{
+            switch (resps){
+                case 3: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
+                case 4: if(GameManager.monthly.get(qNum).cost[3]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(3);}break;
+                case 5: if(GameManager.monthly.get(qNum).cost[4]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(4);}break;
+            }
+        }
+        update();
+        if (qNum == (GameManager.monthly.size()-1)){
+            GameManager.monthDone = true;
+            if (ancDesc != null){
+                Stage stage = (Stage) ancDesc.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else{
+            runQuestions();
+        }
+    }
+
+    
+    @FXML
+    private void handleDescButtonAction(ActionEvent event) throws Exception{
+        if (ancDesc == null){
+            if (!GameManager.monthDone){
+                Stage stage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("Descisions.fxml"));
+                Scene scene = new Scene(root);
+                stage.setTitle("Basic Finance Sim");
+                stage.setScene(scene);
+                stage.show();
+            }
+            
+        }
+    }
+    
+    private void update(){
+        lblSavings.setText("$"+Integer.toString(GameManager.savings));
+        lblHappiness.setText(Integer.toString(GameManager.wellB));
+        GameManager.score = GameManager.savings*GameManager.wellB;
+        lblScore.setText(Integer.toString(GameManager.score));
+    }
+    
+    private void runQuestions(){
+        int reps = GameManager.monthly.size();
+        for (int i = 0; i < reps; i++){
+            if (!GameManager.monthly.get(i).answered){
+                currentQ = GameManager.monthly.get(i);
+                switch(currentQ.answers.length){
+                    case 2: btn1.setDisable(true); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(true);
+                        lblPrompt.setText(currentQ.prompt);
+                        btn2.setText(currentQ.answers[0]);
+                        btn4.setText(currentQ.answers[1]);
+                        break;
+                    case 3: btn1.setDisable(false); btn2.setDisable(true); btn3.setDisable(false); btn4.setDisable(true); btn5.setDisable(false);
+                        lblPrompt.setText(currentQ.prompt);
+                        btn1.setText(currentQ.answers[0]);
+                        btn3.setText(currentQ.answers[1]);
+                        btn5.setText(currentQ.answers[2]);
+                        break;
+                    case 4: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(false);
+                        lblPrompt.setText(currentQ.prompt);
+                        btn1.setText(currentQ.answers[0]);
+                        btn2.setText(currentQ.answers[1]);
+                        btn4.setText(currentQ.answers[2]);
+                        btn5.setText(currentQ.answers[3]);
+                        break;
+                    case 5: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(false); btn4.setDisable(false); btn5.setDisable(false);
+                        lblPrompt.setText(currentQ.prompt);
+                        btn1.setText(currentQ.answers[0]);
+                        btn2.setText(currentQ.answers[1]);
+                        btn3.setText(currentQ.answers[2]);
+                        btn4.setText(currentQ.answers[3]);
+                        btn5.setText(currentQ.answers[4]);
+                        break;
+                }
+                qNum = i;
+                i = reps;
+            }
+        }
+    }
+    
     private int getArrayIndex(int[] arr,int value) {
 
         int k=0;
@@ -327,6 +609,9 @@ public class UIManager implements Initializable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        if (ancDesc != null){
+            runQuestions();
         }
     }
     
