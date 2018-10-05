@@ -314,6 +314,8 @@ public class UIManager implements Initializable {
     }
     
     private void firstLoad() throws InterruptedException{
+        GameManager.setMonthly();
+        lblSavings.setText("$"+Integer.toString(GameManager.savings));
         lblGross.setText("Gross Monthly Income: $"+Integer.toString(GameManager.gross));
         lblMCosts.setText("Monthly Costs: $"+Integer.toString(GameManager.fixed));
         lblNet.setText("Net Monthly Income: $"+Integer.toString(GameManager.net));
@@ -547,7 +549,6 @@ public class UIManager implements Initializable {
     }
     
     private void runQuestions(){
-        GameManager.setMonthly();
         System.out.println(GameManager.monthly.size());
         int reps = GameManager.monthly.size();
         for (int i = 0; i < reps; i++){
