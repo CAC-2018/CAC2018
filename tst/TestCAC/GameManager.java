@@ -33,7 +33,7 @@ public class GameManager {
     
     public static int month;
     public static Question[] questions;
-    public static ArrayList<Question> monthly;
+    public static ArrayList<Question> monthly = new ArrayList<Question>();
     public static boolean monthDone;
     
     public static void initJobs(){

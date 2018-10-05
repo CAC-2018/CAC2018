@@ -120,9 +120,6 @@ public class UIManager implements Initializable {
     private Label lblHappiness;
     
     @FXML
-    private AnchorPane ancDesc;
-    
-    @FXML
     private Label lblPrompt;
     
     @FXML
@@ -385,8 +382,8 @@ public class UIManager implements Initializable {
         update();
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
-            if (ancDesc != null){
-                Stage stage = (Stage) ancDesc.getScene().getWindow();
+            if (lblPrompt != null){
+                Stage stage = (Stage) lblPrompt.getScene().getWindow();
                 stage.close();
             }
         }
@@ -418,8 +415,8 @@ public class UIManager implements Initializable {
         update();
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
-            if (ancDesc != null){
-                Stage stage = (Stage) ancDesc.getScene().getWindow();
+            if (lblPrompt != null){
+                Stage stage = (Stage) lblPrompt.getScene().getWindow();
                 stage.close();
             }
         }
@@ -450,8 +447,8 @@ public class UIManager implements Initializable {
         update();
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
-            if (ancDesc != null){
-                Stage stage = (Stage) ancDesc.getScene().getWindow();
+            if (lblPrompt != null){
+                Stage stage = (Stage) lblPrompt.getScene().getWindow();
                 stage.close();
             }
         }
@@ -483,8 +480,8 @@ public class UIManager implements Initializable {
         update();
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
-            if (ancDesc != null){
-                Stage stage = (Stage) ancDesc.getScene().getWindow();
+            if (lblPrompt != null){
+                Stage stage = (Stage) lblPrompt.getScene().getWindow();
                 stage.close();
             }
         }
@@ -516,8 +513,8 @@ public class UIManager implements Initializable {
         update();
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
-            if (ancDesc != null){
-                Stage stage = (Stage) ancDesc.getScene().getWindow();
+            if (lblPrompt != null){
+                Stage stage = (Stage) lblPrompt.getScene().getWindow();
                 stage.close();
             }
         }
@@ -529,10 +526,10 @@ public class UIManager implements Initializable {
     
     @FXML
     private void handleDescButtonAction(ActionEvent event) throws Exception{
-        if (ancDesc == null){
+        if (lblPrompt == null){
             if (!GameManager.monthDone){
                 Stage stage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("Descisions.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("Desc.fxml"));
                 Scene scene = new Scene(root);
                 stage.setTitle("Basic Finance Sim");
                 stage.setScene(scene);
@@ -550,6 +547,8 @@ public class UIManager implements Initializable {
     }
     
     private void runQuestions(){
+        GameManager.setMonthly();
+        System.out.println(GameManager.monthly.size());
         int reps = GameManager.monthly.size();
         for (int i = 0; i < reps; i++){
             if (!GameManager.monthly.get(i).answered){
@@ -610,7 +609,7 @@ public class UIManager implements Initializable {
                 Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (ancDesc != null){
+        if (lblPrompt != null){
             runQuestions();
         }
     }

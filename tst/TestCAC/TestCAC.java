@@ -26,6 +26,7 @@ public class TestCAC extends Application {
     public void start(Stage stage) throws Exception {
         UiMan.startUI(stage);
         GameManager.initJobs();
+        GameManager.initQuestions();
     }
 
     /**
