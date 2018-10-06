@@ -374,11 +374,23 @@ public class UIManager implements Initializable {
     }
     
     @FXML
+    private void handleFHistButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("History.fxml"));
+        Stage stage = new Stage();
+        stage.initOwner((Stage)lblFScore.getScene().getWindow());
+        stage.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(root);
+        stage.setTitle("Spending History");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+    @FXML
     private void handleNextButtonAction(ActionEvent event) throws Exception{
         if(GameManager.monthDone){
             if (GameManager.month == 12){
-                Parent root = FXMLLoader.load(getClass().getResource("End.fxml"));
-                lblSavings.getScene().setRoot(root);
+                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                lblScore.getScene().setRoot(root);
             }
             GameManager.savings+= GameManager.net;
             lblSavings.setText("Savings: $"+Integer.toString(GameManager.savings));
@@ -581,7 +593,7 @@ public class UIManager implements Initializable {
                 stage.show();
             }
             else{
-                popup("All monthly descisions complete. Hit the next month button to continue.",(Stage)lblPrompt.getScene().getWindow());
+                popup("All monthly descisions complete. Hit the next month button to continue.",(Stage)lblScore.getScene().getWindow());
             }            
         }
     }
@@ -668,75 +680,75 @@ public class UIManager implements Initializable {
         ObservableList temp = FXCollections.observableArrayList();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(0)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstJan.setItems(temp);
+        lstJan.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(1)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstFeb.setItems(temp);
+        lstFeb.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(2)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstMar.setItems(temp);
+        lstMar.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(3)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstApr.setItems(temp);
+        lstApr.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(4)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstMay.setItems(temp);
+        lstMay.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(5)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstJun.setItems(temp);
+        lstJun.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(6)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstJul.setItems(temp);
+        lstJul.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(7)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstAug.setItems(temp);
+        lstAug.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(8)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstSep.setItems(temp);
+        lstSep.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(9)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstOct.setItems(temp);
+        lstOct.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(10)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstNov.setItems(temp);
+        lstNov.getItems().setAll(temp);
         temp.clear();
         temp.add("Prompt,Answer,Cost,Gain");
         for (Storage str: GameManager.saved.get(11)){
-            temp.add(str.answer+","+str.question+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
         }
-        lstDec.setItems(temp);
+        lstDec.getItems().setAll(temp);
         temp.clear();
     }
     
@@ -768,7 +780,12 @@ public class UIManager implements Initializable {
             runQuestions();
         }
         if (lblFSavings != null){
-            endGame();
+            try{
+                endGame();
+            }
+            catch(Exception exc){
+                System.out.println(exc);
+            }
         }
         if (lblBox != null){
             box();

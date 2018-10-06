@@ -12,6 +12,9 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cac2018.UIManager">
    <children>
       <GridPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="580.0">
+        <cursor>
+            <Cursor fx:constant="HAND" />
+        </cursor>
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -28,7 +31,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Button fx:id="btnFHist" mnemonicParsing="false" onAction="#handleHistButtonAction" text="View Spending History" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button fx:id="btnFHist" mnemonicParsing="false" onAction="#handleFHistButtonAction" text="View Spending History" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <Button fx:id="btnFMenu" mnemonicParsing="false" onAction="#handleFMenuButtonAction" text="Exit to Menu" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                <children>
@@ -39,7 +42,7 @@
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label fx:id="lblFScore" alignment="CENTER" contentDisplay="CENTER" text="Final Score:" textAlignment="CENTER" wrapText="true" />
-                  <Label fx:id="lblHousing" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="lblFHousing" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" wrapText="true" />
                </children>
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
