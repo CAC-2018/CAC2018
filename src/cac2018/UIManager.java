@@ -38,7 +38,7 @@ public class UIManager implements Initializable {
     private Button btnPlay;
     
     @FXML
-    private Label btnHelp;
+    private Button btnHelp;
     
     @FXML
     private ChoiceBox cbHousing;
@@ -226,7 +226,7 @@ public class UIManager implements Initializable {
     
     @FXML
     private void handleCreditsButtonAction(ActionEvent event) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Credit.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Credits.fxml"));
         Stage stage = new Stage();
         stage.initOwner((Stage)btnHelp.getScene().getWindow());
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -370,9 +370,6 @@ public class UIManager implements Initializable {
         Scene scene = new Scene(root);
         stage.setTitle("Spending History");
         stage.setScene(scene);
-        stage.setOnShown((WindowEvent ev) -> {
-            populate();
-        });
         stage.show();
     }
     
@@ -591,9 +588,9 @@ public class UIManager implements Initializable {
     
     private void update(){
         GameManager.score = (int) Math.round(Math.sqrt((double)(GameManager.savings*GameManager.wellB)));
-        lblSavings.setText("$"+Integer.toString(GameManager.savings));
+        lblSavings.setText("Savings: $"+Integer.toString(GameManager.savings));
         lblHappiness.setText("Well Being Value: "+Integer.toString(GameManager.wellB));
-        lblScore.setText("Score:"+Integer.toString(GameManager.score));
+        lblScore.setText("Score: "+Integer.toString(GameManager.score));
     }
     
     private void runQuestions(){
@@ -603,20 +600,20 @@ public class UIManager implements Initializable {
                 currentQ = GameManager.monthly.get(i);
                 switch(currentQ.answers.length){
                     case 2: btn1.setDisable(true); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(true);
-                        btn1.setVisible(false); btn2.setDisable(true); btn3.setDisable(false); btn4.setDisable(true); btn5.setDisable(false);
+                        btn1.setVisible(false); btn2.setVisible(true); btn3.setVisible(false); btn4.setVisible(true); btn5.setVisible(false);
                         lblPrompt.setText(currentQ.prompt);
                         btn2.setText(currentQ.answers[0]);
                         btn4.setText(currentQ.answers[1]);
                         break;
                     case 3: btn1.setDisable(false); btn2.setDisable(true); btn3.setDisable(false); btn4.setDisable(true); btn5.setDisable(false);
-                        btn1.setVisible(true); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(true);
+                        btn1.setVisible(true); btn2.setVisible(false); btn3.setVisible(true); btn4.setVisible(false); btn5.setVisible(true);
                         lblPrompt.setText(currentQ.prompt);
                         btn1.setText(currentQ.answers[0]);
                         btn3.setText(currentQ.answers[1]);
                         btn5.setText(currentQ.answers[2]);
                         break;
                     case 4: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(false);
-                        btn1.setVisible(true); btn2.setDisable(true); btn3.setDisable(false); btn4.setDisable(true); btn5.setDisable(true);
+                        btn1.setVisible(true); btn2.setVisible(true); btn3.setVisible(false); btn4.setVisible(true); btn5.setVisible(true);
                         lblPrompt.setText(currentQ.prompt);
                         btn1.setText(currentQ.answers[0]);
                         btn2.setText(currentQ.answers[1]);
@@ -624,7 +621,7 @@ public class UIManager implements Initializable {
                         btn5.setText(currentQ.answers[3]);
                         break;
                     case 5: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(false); btn4.setDisable(false); btn5.setDisable(false);
-                        btn1.setVisible(true); btn2.setDisable(true); btn3.setDisable(true); btn4.setDisable(true); btn5.setDisable(true);
+                        btn1.setVisible(true); btn2.setVisible(true); btn3.setVisible(true); btn4.setVisible(true); btn5.setVisible(true);
                         lblPrompt.setText(currentQ.prompt);
                         btn1.setText(currentQ.answers[0]);
                         btn2.setText(currentQ.answers[1]);
@@ -652,6 +649,7 @@ public class UIManager implements Initializable {
     }
     
     private void popup(String msg, Stage owner) throws IOException{
+        GameManager.message = msg;
         Stage stage = new Stage();
         stage.initOwner(owner);
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -659,12 +657,11 @@ public class UIManager implements Initializable {
         Scene scene = new Scene(root);
         stage.setTitle("Basic Finance Sim");
         stage.setScene(scene);
-        stage.setOnShown((WindowEvent ev) -> {pop(msg);});
         stage.show();
     }
     
-    private void pop(String msg){
-        lblBox.setText(msg);
+    private void box(){
+        lblBox.setText(GameManager.message);
     }
     
     private void populate(){
@@ -750,10 +747,10 @@ public class UIManager implements Initializable {
         lblFSal.setText("Salary: $" + Integer.toString(GameManager.savings));
         lblFDeps.setText("Number of Dependents: " + Integer.toString(GameManager.dep));
         if (GameManager.haveHouse){
-            lblFSal.setText("Mortgage: $" + Integer.toString(GameManager.mortRent));
+            lblFHousing.setText("Mortgage: $" + Integer.toString(GameManager.mortRent));
         }
         else{
-            lblFSal.setText("Rent: $" + Integer.toString(GameManager.mortRent));
+            lblFHousing.setText("Rent: $" + Integer.toString(GameManager.mortRent));
         }
     }
     
@@ -772,6 +769,13 @@ public class UIManager implements Initializable {
         }
         if (lblFSavings != null){
             endGame();
+        }
+        if (lblBox != null){
+            box();
+        }
+        
+        if (lstJan != null){
+            populate();
         }
     }
     

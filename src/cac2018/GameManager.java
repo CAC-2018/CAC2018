@@ -37,6 +37,8 @@ public class GameManager {
     public static ArrayList<Question> monthly = new ArrayList<Question>();
     public static boolean monthDone;
     
+    public static String message;
+    
     public static ArrayList<ArrayList<Storage>> saved = new ArrayList<ArrayList<Storage>>();
     
     public static void initJobs(){

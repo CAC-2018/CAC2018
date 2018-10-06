@@ -19,7 +19,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="lblBox" alignment="CENTER" contentDisplay="CENTER" text="This game was produced by Kennewick High computer science students for the 2018 Congressional App Challenge." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <Label fx:id="lblBox" alignment="CENTER" contentDisplay="CENTER" text="This game was produced by Kennewick High School computer science students for the 2018 Congressional App Challenge." textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
          </children>
       </GridPane>
    </children>

@@ -17,7 +17,7 @@ public class Question {
     public double multiplier;
     public int[] cost;
     public int response;
-    public Boolean scalable;
+    public Boolean scalable = false;
     
     public Question(String p, String a[], double m, int c[]){
         prompt = p;
