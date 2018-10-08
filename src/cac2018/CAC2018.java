@@ -17,14 +17,14 @@ import javafx.stage.Stage;
  */
 public class CAC2018 extends Application {
     
+    UIManager UiMan = new UIManager();
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
+        UiMan.startUI(stage);
+        GameManager.initJobs();
+        GameManager.initQuestions();
+        GameManager.initSaved();
     }
 
     /**
@@ -32,6 +32,5 @@ public class CAC2018 extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
+    }    
 }
