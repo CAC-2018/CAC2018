@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cac2018.UIManager">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cac2018.UIManager">
    <children>
       <VBox fx:id="vboxBox" alignment="CENTER" layoutX="220.0" layoutY="86.0" prefHeight="222.0" prefWidth="160.0">
          <children>
