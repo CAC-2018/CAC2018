@@ -308,6 +308,8 @@ public class UIManager implements Initializable {
             int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
             lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
             lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+            lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
         }
         else{
             popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
