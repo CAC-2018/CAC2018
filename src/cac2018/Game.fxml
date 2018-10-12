@@ -38,7 +38,7 @@
                </font></Label>
             <Button fx:id="btnHelp" mnemonicParsing="false" onAction="#handleHelpButtonAction" text="Help" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
             <Button fx:id="lblMenuG" mnemonicParsing="false" onAction="#handleMenuButtonAction" text="Exit to Menu" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-            <Label fx:id="lblHappiness" text="Wellness Index: 0" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <Label fx:id="lblHappiness" text="Wellness Index: 0" wrapText="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font></Label>
@@ -48,40 +48,8 @@
                   <Font size="14.0" />
                </font></Button>
             <Button fx:id="btnDescisions" mnemonicParsing="false" onAction="#handleDescButtonAction" text="Monthly Spending Decisions" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="2">
                <children>
-                  <Label text="Fixed Monthly Costs" wrapText="true" />
-                  <Label fx:id="lblMeds" text="Medical: $300">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblTax" text="Taxes: $0">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblMortRent" text="Mortgage/Rent: $0" wrapText="true">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblHIns" text="Home Insurance: $0" wrapText="true">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <Label fx:id="lblGross" text="Gross Monthly Income: $0" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <Label fx:id="lblNet" disable="true" text="Net Monthly Salary: $0" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
-               <children>
-                  <Label fx:id="lblEssentials" text="Food, Clothing, &amp; Essentials: $800" wrapText="true">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
                   <Label fx:id="lblMCosts" text="Monthly Costs: $0" wrapText="true">
                      <font>
                         <Font size="14.0" />
@@ -89,11 +57,47 @@
                   </Label>
                </children>
             </VBox>
-            <Label fx:id="lblSavings" contentDisplay="CENTER" text="Savings: $0" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <Label fx:id="lblGross" text="Monthly Income: $0" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="lblNet" disable="true" text="Net Monthly Salary: $0" visible="false" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Label fx:id="lblSavings" contentDisplay="CENTER" text="Savings: $0" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+               <children>
+                  <Label disable="true" text="Fixed Monthly Costs" visible="false" wrapText="true" />
+                  <Label fx:id="lblMeds" disable="true" text="Medical: $300" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblTax" disable="true" text="Taxes: $0" visible="false">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblMortRent" disable="true" text="Mortgage/Rent: $0" visible="false" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblHIns" disable="true" text="Home Insurance: $0" visible="false" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblEssentials" disable="true" text="Food, Clothing, &amp; Essentials: $800" visible="false" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
          </children>
       </GridPane>
    </children>

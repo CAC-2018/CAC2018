@@ -315,6 +315,7 @@ public class UIManager implements Initializable {
             int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
             lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
             lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
         }
     }
     
@@ -426,7 +427,7 @@ public class UIManager implements Initializable {
     }
     
     private void firstLoad() throws InterruptedException{
-        lblGross.setText("Gross Monthly Salary: $"+Integer.toString(GameManager.gross));
+        lblGross.setText("Monthly Salary: $"+Integer.toString(GameManager.gross));
         lblMCosts.setText("Monthly Costs: $"+Integer.toString(GameManager.fixed));
         lblNet.setText("Net Monthly Income: $"+Integer.toString(GameManager.net));
         lblTax.setText("Taxes: $"+Integer.toString(GameManager.tax));
@@ -838,7 +839,7 @@ public class UIManager implements Initializable {
         lblFSavings.setText("Final Savings: $" + Integer.toString(GameManager.savings));
         lblFScore.setText("Final Score: " + Integer.toString(GameManager.score));
         lblFWellBeing.setText("Final Well Being: " + Integer.toString(GameManager.wellB));
-        lblFSal.setText("Salary: $" + Integer.toString(GameManager.savings));
+        lblFSal.setText("Salary: $" + Integer.toString(GameManager.gross));
         lblFDeps.setText("Number of Dependents: " + Integer.toString(GameManager.dep));
         if (GameManager.haveHouse){
             lblFHousing.setText("Mortgage: $" + Integer.toString(GameManager.mortRent));
