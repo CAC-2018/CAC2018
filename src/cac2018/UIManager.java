@@ -41,6 +41,12 @@ public class UIManager implements Initializable {
     private Button btnHelp;
     
     @FXML
+    private RadioButton radHouse;
+    
+    @FXML
+    private RadioButton radApart;
+    
+    @FXML
     private ChoiceBox cbHousing;
     
     @FXML
@@ -48,9 +54,6 @@ public class UIManager implements Initializable {
     
     @FXML
     private ChoiceBox cbDependants;
-    
-    @FXML
-    private RadioButton radHouse;
     
     @FXML
     private Tooltip tltHousing;
@@ -96,6 +99,18 @@ public class UIManager implements Initializable {
     
     @FXML
     private Label lblScore;
+    
+    @FXML
+    private Label lblMonSal;
+    
+    @FXML
+    private Label lblMonthTax;
+    
+    @FXML
+    private Label lblTotDep;
+    
+    @FXML
+    private Label lblTotCost;
     
     @FXML
     private Label lblHappiness;
@@ -254,10 +269,10 @@ public class UIManager implements Initializable {
             Boolean house = false;        
             if(radHouse.isSelected()){
                 house = true;
-                housing = getArrayIndex(GameManager.houses[index],value);
+                housing = getArrayIndex(GameManager.houses,value);
             }
             else{
-                housing = getArrayIndex(GameManager.apartments[index],value);
+                housing = getArrayIndex(GameManager.apartments,value);
             }
             int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
             GameManager.initGame(index, house, housing, deps);
@@ -270,68 +285,73 @@ public class UIManager implements Initializable {
         }
     }
     
-    @FXML
-    private void handleJobChoiceAction(ActionEvent event) throws Exception{   
-        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
-        lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
+    private void initCC(){
         List<String> list = new ArrayList<String>();
         ObservableList houses = FXCollections.observableList(list);
-        List<String> list2 = new ArrayList<String>();
-        ObservableList deps = FXCollections.observableList(list2);
-        if(radHouse.isSelected()){
-            for (int house: GameManager.houses[index]){
-                houses.add("$"+Integer.toString(house));
-            }
-            cbHousing.setItems(houses);
-            cbHousing.setValue(houses.get(0));
-            GameManager.mortIns(GameManager.houses[index][0]);
-            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort) +"/month");
-            lblHouseCost.setText("House Value:");
-            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
-            tltHousing.setText("House Value ($)");
-        }
-        else{
-            for (int house: GameManager.apartments[index]){
-                houses.add("$"+Integer.toString(house));
-            }
-            cbHousing.setItems(houses);
-            cbHousing.setValue(houses.get(0));
-            lblMort.setText("");
-            lblIns.setText("");
-            lblHouseCost.setText("Monthly Rent:");
-            tltHousing.setText("Monthly Rent ($)");
-        }
-        GameManager.calcDeps(GameManager.salaries[index]);
-        for (int dep: GameManager.deps){
-            deps.add(Integer.toString(dep));
-        }
-        cbDependants.setItems(deps);
-        cbDependants.setValue("0");
-    }
-    
-    @FXML
-    private void handleHouseRadAction(ActionEvent event) throws Exception{
-        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
-        List<String> list = new ArrayList<String>();
-        ObservableList houses = FXCollections.observableList(list);
-        for (int house: GameManager.houses[index]){
+        for (int house: GameManager.houses){
             houses.add("$"+Integer.toString(house));
         }
         cbHousing.setItems(houses);
         cbHousing.setValue(houses.get(0));
-        GameManager.mortIns(GameManager.houses[index][0]);
-        lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
-        lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
+        GameManager.mortIns(GameManager.houses[0]);
+        lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort) +"/month");
         lblHouseCost.setText("House Value:");
+        lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
         tltHousing.setText("House Value ($)");
+        int depo = Integer.parseInt(((String)cbDependants.getValue()).trim());
+        lblTotDep.setText("Total Cost of Living: $"+Integer.toString((depo+1)*1100)+"/month");
+    }
+    
+    @FXML
+    private void handleJobChoiceAction(ActionEvent event) throws Exception{   
+        if(checkEx()){
+            int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
+            lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
+            lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+        }
+        else{
+            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
+            cbProfession.setValue("Doctor");
+            int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
+            lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
+            lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+        }
+    }
+    
+    @FXML
+    private void handleHouseRadAction(ActionEvent event) throws Exception{
+        if(checkEx()){
+            List<String> list = new ArrayList<String>();
+            ObservableList houses = FXCollections.observableList(list);
+            for (int house: GameManager.houses){
+                houses.add("$"+Integer.toString(house));
+            }
+            cbHousing.setItems(houses);
+            cbHousing.setValue(houses.get(0));
+            GameManager.mortIns(GameManager.houses[0]);
+            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
+            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
+            lblHouseCost.setText("House Value:");
+            tltHousing.setText("House Value ($)");
+        }
+        else{
+            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
+            cbHousing.setValue("$400");
+            radHouse.setSelected(false);
+            radApart.setSelected(true);
+            lblMort.setText("");
+            lblIns.setText("");
+            lblHouseCost.setText("Monthly Rent:");
+            tltHousing.setText("Monthly Rent ($)");
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+        }
     }
     
     @FXML
     private void handleApartRadAction(ActionEvent event) throws Exception{
-        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
         List<String> list = new ArrayList<String>();
         ObservableList houses = FXCollections.observableList(list);
-        for (int house: GameManager.apartments[index]){
+        for (int house: GameManager.apartments){
             houses.add("$"+Integer.toString(house));
         }
         cbHousing.setItems(houses);
@@ -343,20 +363,66 @@ public class UIManager implements Initializable {
     }
     
     @FXML
+    private void handleDepChoiceAction(ActionEvent event) throws Exception{
+        if(checkEx()){
+            int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
+            lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+        }
+        else{
+            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
+            cbDependants.setValue("0");
+            lblTotDep.setText("Total Cost of Living: $1100");
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+        }
+    }
+    
+    @FXML
     private void handleHouseChoiceAction(ActionEvent event) throws Exception{
         try{
-            if(radHouse.isSelected()){
-                String str = ((String)cbHousing.getValue()).trim().substring(1);
-                int house = Integer.parseInt(str);
-                GameManager.mortIns(house);
-                lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
-                lblHouseCost.setText("House Value:");
-                lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
+            if(checkEx()){
+                if(radHouse.isSelected()){
+                    String str = ((String)cbHousing.getValue()).trim().substring(1);
+                    int house = Integer.parseInt(str);
+                    GameManager.mortIns(house);
+                    lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
+                    lblHouseCost.setText("House Value:");
+                    lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
+                    lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+                }
+            }
+            else{
+                popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
+                if(radHouse.isSelected()){
+                    cbHousing.setValue("$81000");
+                    lblMort.setText("Mortgage: $400");
+                    lblIns.setText("Home Insurance: $28");
+                }
+                else{
+                    cbHousing.setValue("$700");
+                }
+                lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
             }
         }
         catch (Exception ex){
             System.out.println(ex.toString()+" @handleHouseChoiceAction,UIManager");
         }
+    }
+    
+    private Boolean checkEx(){
+        int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
+        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
+        int value = Integer.parseInt(((String)cbHousing.getValue()).trim().substring(1)); 
+        Boolean house = radHouse.isSelected();
+        return GameManager.check(index, deps, value, house);
+    }
+    
+    private int calcTot(){
+        int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
+        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
+        int value = Integer.parseInt(((String)cbHousing.getValue()).trim().substring(1)); 
+        Boolean house = radHouse.isSelected();
+        return GameManager.calc(index, deps, value, house);
     }
     
     private void firstLoad() throws InterruptedException{
@@ -442,8 +508,8 @@ public class UIManager implements Initializable {
         int resps = GameManager.monthly.get(qNum).answers.length;
         if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
             popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>10){
-                GameManager.wellB-=10;
+            if(GameManager.wellB>100){
+                GameManager.wellB-=100;
             }
             else{
                 GameManager.wellB = 0;
@@ -473,8 +539,8 @@ public class UIManager implements Initializable {
         int resps = GameManager.monthly.get(qNum).answers.length;
         if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
             popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>10){
-                GameManager.wellB-=10;
+            if(GameManager.wellB>100){
+                GameManager.wellB-=100;
             }
             else{
                 GameManager.wellB = 0;
@@ -504,8 +570,8 @@ public class UIManager implements Initializable {
         int resps = GameManager.monthly.get(qNum).answers.length;
         if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
             popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>10){
-                GameManager.wellB-=10;
+            if(GameManager.wellB>100){
+                GameManager.wellB-=100;
             }
             else{
                 GameManager.wellB = 0;
@@ -534,8 +600,8 @@ public class UIManager implements Initializable {
         int resps = GameManager.monthly.get(qNum).answers.length;
         if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
             popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>10){
-                GameManager.wellB-=10;
+            if(GameManager.wellB>100){
+                GameManager.wellB-=100;
             }
             else{
                 GameManager.wellB = 0;
@@ -565,8 +631,8 @@ public class UIManager implements Initializable {
         int resps = GameManager.monthly.get(qNum).answers.length;
         if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
             popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>10){
-                GameManager.wellB-=10;
+            if(GameManager.wellB>100){
+                GameManager.wellB-=100;
             }
             else{
                 GameManager.wellB = 0;
@@ -609,7 +675,7 @@ public class UIManager implements Initializable {
                 stage.show();
             }
             else{
-                popup("All monthly descisions complete. Hit the next month button to continue.",(Stage)lblScore.getScene().getWindow());
+                popup("All monthly decisions complete. Hit the next month button to continue.",(Stage)lblScore.getScene().getWindow());
             }            
         }
     }
@@ -792,6 +858,11 @@ public class UIManager implements Initializable {
                 Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        if (radHouse != null){
+            initCC();
+        }
+        
         if (lblPrompt != null){
             runQuestions();
         }

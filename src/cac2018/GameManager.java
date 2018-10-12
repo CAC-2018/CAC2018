@@ -15,8 +15,8 @@ import java.util.Collections;
 public class GameManager {
     public static String[] jobs;
     public static int[] salaries;
-    public static int[][] houses;
-    public static int[][] apartments;
+    public static int[] houses;
+    public static int[] apartments;
     public static int mort = 0;
     public static int homeIns = 0;
     public static int[] deps;
@@ -49,18 +49,9 @@ public class GameManager {
             "Dental Hygenist","Professor","Nurse","Sportsperson","Scientist","Engineer","Lawyer","Doctor"};
         salaries = new int[]{40000,40000,45000,45000,50000,50000,55000,60000,60000,60000,65000,65000,70000,
             75000,75000,85000,90000,100000,125000,200000};
-        houses = new int[][]{{81000,101500},{81000,101500},{81000,101500,122000},{81000,101500,122000},
-            {101500,122000,142000,162500},{101500,122000,142000,162500},{122000,142000,162500},
-            {122000,142000,162500,183000},{122000,142000,162500,183000},{122000,142000,162500,183000},
-            {142000,162500,183000,203250},{142000,162500,183000,203250},{142000,162500,183000,203250,223500},
-            {162500,183000,203250,233500,244000},{162500,183000,203250,233500,244000},
-            {183000,203250,223500,244000,264250},{183000,203250,223500,244000,264250},
-            {203250,223500,244000,264250,285000,305000},{223500,244000,264250,285000,305000,325000,366000},
-            {285000,305000,325000,366000,407000,457000,478000,508000,549000}};
-        apartments = new int[][]{{400},{400},{400,500},{400,500},{400,500,600},{400,500,600},{500,600},
-            {500,600,700},{500,600,700},{500,600,700},{600,700,800},{600,700,800},{600,700,800},
-            {700,800,900},{700,800,900},{800,900,1000,1100},{800,900,1000,1100},{800,900,1000,1100,1200},
-            {1000,1100,1200,1300,1400},{1300,1400,1500,1600,1700,1800}};
+        houses = new int[]{81000,101500,122000,142000,162500,183000,203250,223500,244000,264250,285000,305000,325000,366000,407000,457000,478000,508000,549000};
+        apartments = new int[]{400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800};
+        deps = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
     }
     
     public static void initQuestions(){
@@ -140,6 +131,43 @@ public class GameManager {
         Collections.shuffle(monthly);
     }
     
+    public static Boolean check(int i, int d, int h, Boolean hou){
+        int sal = salaries[i];
+        int costs = 0;
+        costs += (d+1)*1100;
+        if (hou){
+            mortIns(h);
+            costs += mort;
+            costs += homeIns;
+        }
+        else{
+            costs += h;
+        }
+        costs += tax(sal);
+        if (costs > (sal/12)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    public static int calc(int i, int d, int h, Boolean hou){
+        int sal = salaries[i];
+        int costs = 0;
+        costs += (d+1)*1100;
+        if (hou){
+            mortIns(h);
+            costs += mort;
+            costs += homeIns;
+        }
+        else{
+            costs += h;
+        }
+        costs += tax(sal);
+        return costs;
+    }
+    
     public static void initGame(int ind, Boolean h, int hou, int d){
         meds = 300 * (d+1);
         ess = 800 * (d+1);
@@ -148,12 +176,12 @@ public class GameManager {
         haveHouse = h;
         net = gross - (1100*(dep+1));
         if (haveHouse){
-            mortIns(houses[ind][hou]);
+            mortIns(houses[hou]);
             mortRent = mort;
             net -= mort + homeIns;
         }
         else{
-            mortRent = apartments[ind][hou];
+            mortRent = apartments[hou];
             net -= mortRent;
         }
         tax(salaries[ind]);
@@ -166,7 +194,7 @@ public class GameManager {
         setMonthly();
     }
     
-    public static int tax (int inc){
+    public static int tax(int inc){
         switch (inc){
             case 40000: tax = 63;break;
             case 45000: tax = 96;break;
@@ -209,21 +237,6 @@ public class GameManager {
             case 508000: mort = 2500;break;
             case 549000: mort = 2700;break;
             default: mort = 0; break;
-        }
-    }
-    
-    public static void calcDeps(int sal){
-        if (sal < 50000){
-            deps = new int[]{0,1};        
-        }
-        else if (sal < 65000){
-            deps = new int[]{0,1,2};
-        }
-        else if (sal < 75000){
-            deps = new int[]{0,1,2,3,4};
-        }
-        else {
-            deps = new int[]{0,1,2,3,4,5,6};
         }
     }
 }
