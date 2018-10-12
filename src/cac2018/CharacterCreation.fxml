@@ -109,8 +109,12 @@
          </padding>
       </Button>
       <Button fx:id="btnBack" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackCCButtonAction" text="Back" />
-      <Label fx:id="lblMort" layoutX="387.0" layoutY="183.0" text="Mortgage: $400" />
-      <Label fx:id="lblIns" layoutX="387.0" layoutY="200.0" text="Home Insurance: $28" />
+      <Label fx:id="lblMort" layoutX="387.0" layoutY="183.0" text="Mortgage: $400/month" />
+      <Label fx:id="lblIns" layoutX="387.0" layoutY="200.0" text="Home Insurance: $28/month" />
       <Label fx:id="lblSal" layoutX="387.0" layoutY="105.0" text="Yearly Salary: $40000" />
+      <Label layoutX="101.0" layoutY="105.0" text="Profession:" />
+      <Label layoutX="112.0" layoutY="154.0" text="Live in:" />
+      <Label fx:id="lblHouseCost" layoutX="99.0" layoutY="192.0" text="House Value:" />
+      <Label fx:id="lblHouseCost1" layoutX="67.0" layoutY="250.0" text="Number of Dependents:" />
    </children>
 </AnchorPane>

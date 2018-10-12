@@ -30,6 +30,8 @@ public class GameManager {
     public static int mortRent;
     public static int tax;
     public static int dep;
+    public static int ess;
+    public static int meds;
     public static Boolean haveHouse;
     
     public static int month;
@@ -139,10 +141,12 @@ public class GameManager {
     }
     
     public static void initGame(int ind, Boolean h, int hou, int d){
+        meds = 300 * (d+1);
+        ess = 800 * (d+1);
         dep = d;
         gross = Math.round((salaries[ind])/12);
         haveHouse = h;
-        net = gross - 1100;
+        net = gross - (1100*(dep+1));
         if (haveHouse){
             mortIns(houses[ind][hou]);
             mortRent = mort;

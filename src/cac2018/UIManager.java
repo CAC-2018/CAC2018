@@ -62,6 +62,12 @@ public class UIManager implements Initializable {
     private Label lblMort;
     
     @FXML
+    private Label lblEssentials;
+    
+    @FXML
+    private Label lblMeds;
+    
+    @FXML
     private Label lblIns;
     
     @FXML
@@ -99,6 +105,9 @@ public class UIManager implements Initializable {
     
     @FXML
     private Label lblBox;
+    
+    @FXML
+    private Label lblHouseCost;
     
     @FXML
     private Label lblFSavings;
@@ -276,8 +285,9 @@ public class UIManager implements Initializable {
             cbHousing.setItems(houses);
             cbHousing.setValue(houses.get(0));
             GameManager.mortIns(GameManager.houses[index][0]);
-            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort));
-            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns));
+            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort) +"/month");
+            lblHouseCost.setText("House Value:");
+            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
             tltHousing.setText("House Value ($)");
         }
         else{
@@ -288,6 +298,7 @@ public class UIManager implements Initializable {
             cbHousing.setValue(houses.get(0));
             lblMort.setText("");
             lblIns.setText("");
+            lblHouseCost.setText("Monthly Rent:");
             tltHousing.setText("Monthly Rent ($)");
         }
         GameManager.calcDeps(GameManager.salaries[index]);
@@ -309,8 +320,9 @@ public class UIManager implements Initializable {
         cbHousing.setItems(houses);
         cbHousing.setValue(houses.get(0));
         GameManager.mortIns(GameManager.houses[index][0]);
-        lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort));
-        lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns));
+        lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
+        lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
+        lblHouseCost.setText("House Value:");
         tltHousing.setText("House Value ($)");
     }
     
@@ -326,6 +338,7 @@ public class UIManager implements Initializable {
         cbHousing.setValue(houses.get(0));
         lblMort.setText("");
         lblIns.setText("");
+        lblHouseCost.setText("Monthly Rent:");
         tltHousing.setText("Monthly Rent ($)");
     }
     
@@ -336,8 +349,9 @@ public class UIManager implements Initializable {
                 String str = ((String)cbHousing.getValue()).trim().substring(1);
                 int house = Integer.parseInt(str);
                 GameManager.mortIns(house);
-                lblMort.setText("Mortgage: $" + GameManager.mort);
-                lblIns.setText("Home Insurance: $" + GameManager.homeIns);
+                lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
+                lblHouseCost.setText("House Value:");
+                lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
             }
         }
         catch (Exception ex){
@@ -346,11 +360,13 @@ public class UIManager implements Initializable {
     }
     
     private void firstLoad() throws InterruptedException{
-        lblGross.setText("Gross Monthly Income: $"+Integer.toString(GameManager.gross));
+        lblGross.setText("Gross Monthly Salary: $"+Integer.toString(GameManager.gross));
         lblMCosts.setText("Monthly Costs: $"+Integer.toString(GameManager.fixed));
         lblNet.setText("Net Monthly Income: $"+Integer.toString(GameManager.net));
         lblTax.setText("Taxes: $"+Integer.toString(GameManager.tax));
-        lblSavings.setText("Savings: $"+Integer.toString(GameManager.savings));
+        lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
+        lblEssentials.setText("Food, Colothing, & Essentials: $"+Integer.toString(GameManager.ess));
+        lblMeds.setText("Medical: $"+Integer.toString(GameManager.meds));
         if (GameManager.haveHouse){
             lblMortRent.setText("Mortgage: $"+Integer.toString(GameManager.mortRent));
             lblHIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns));
@@ -393,10 +409,10 @@ public class UIManager implements Initializable {
                 lblScore.getScene().setRoot(root);
             }
             GameManager.savings+= GameManager.net;
-            lblSavings.setText("Savings: $"+Integer.toString(GameManager.savings));
+            lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
             GameManager.score = (int) Math.round(Math.sqrt((double)(GameManager.savings*GameManager.wellB)));
-            lblScore.setText("Score: "+Integer.toString(GameManager.score));
-            lblHappiness.setText("Well Being Value: "+Integer.toString(GameManager.wellB));
+            lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
+            lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
             GameManager.month+=1;
             GameManager.monthDone = false;
             GameManager.setMonthly();
@@ -600,9 +616,9 @@ public class UIManager implements Initializable {
     
     private void update(){
         GameManager.score = (int) Math.round(Math.sqrt((double)(GameManager.savings*GameManager.wellB)));
-        lblSavings.setText("Savings: $"+Integer.toString(GameManager.savings));
-        lblHappiness.setText("Well Being Value: "+Integer.toString(GameManager.wellB));
-        lblScore.setText("Score: "+Integer.toString(GameManager.score));
+        lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
+        lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
+        lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
     }
     
     private void runQuestions(){
@@ -678,75 +694,75 @@ public class UIManager implements Initializable {
     
     private void populate(){
         ObservableList temp = FXCollections.observableArrayList();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(0)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstJan.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(1)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstFeb.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(2)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstMar.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(3)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstApr.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(4)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstMay.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(5)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstJun.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(6)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstJul.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(7)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstAug.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(8)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstSep.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(9)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstOct.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(10)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstNov.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer,Cost,Gain");
+        temp.add("Prompt,Answer");
         for (Storage str: GameManager.saved.get(11)){
-            temp.add(str.question+","+str.answer+","+Integer.toString(str.cost)+","+Integer.toString(str.gain));
+            temp.add(str.question+","+str.answer);
         }
         lstDec.getItems().setAll(temp);
         temp.clear();
