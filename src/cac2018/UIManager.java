@@ -5,6 +5,9 @@
  */
 package cac2018;
 
+import java.awt.Color;
+import java.awt.Paint;
+import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -123,6 +126,9 @@ public class UIManager implements Initializable {
     
     @FXML
     private Label lblHouseCost;
+    
+    @FXML
+    private Label lblEnd;
     
     @FXML
     private Label lblFSavings;
@@ -310,14 +316,16 @@ public class UIManager implements Initializable {
             lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
             lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
             lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
         }
         else{
-            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
-            cbProfession.setValue("Doctor");
+            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
             int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
             lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
             lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+            lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
             lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
         }
     }
     
@@ -336,17 +344,24 @@ public class UIManager implements Initializable {
             lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
             lblHouseCost.setText("House Value:");
             tltHousing.setText("House Value ($)");
+            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
         }
         else{
-            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
-            cbHousing.setValue("$400");
-            radHouse.setSelected(false);
-            radApart.setSelected(true);
-            lblMort.setText("");
-            lblIns.setText("");
-            lblHouseCost.setText("Monthly Rent:");
-            tltHousing.setText("Monthly Rent ($)");
+            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
+            List<String> list = new ArrayList<String>();
+            ObservableList houses = FXCollections.observableList(list);
+            for (int house: GameManager.houses){
+                houses.add("$"+Integer.toString(house));
+            }
+            cbHousing.setItems(houses);
+            cbHousing.setValue(houses.get(0));
+            GameManager.mortIns(GameManager.houses[0]);
+            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
+            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
+            lblHouseCost.setText("House Value:");
+            tltHousing.setText("House Value ($)");
             lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
         }
     }
     
@@ -363,6 +378,7 @@ public class UIManager implements Initializable {
         lblIns.setText("");
         lblHouseCost.setText("Monthly Rent:");
         tltHousing.setText("Monthly Rent ($)");
+        lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
     }
     
     @FXML
@@ -371,12 +387,14 @@ public class UIManager implements Initializable {
             int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
             lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
             lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
         }
         else{
-            popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
-            cbDependants.setValue("0");
-            lblTotDep.setText("Total Cost of Living: $1100");
+            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
+            int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
+            lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
             lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
         }
     }
     
@@ -391,20 +409,23 @@ public class UIManager implements Initializable {
                     lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
                     lblHouseCost.setText("House Value:");
                     lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
-                    lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-                }
-            }
-            else{
-                popup("Your monthly expenses exceeded your monthly salary.",(Stage)lblSal.getScene().getWindow());
-                if(radHouse.isSelected()){
-                    cbHousing.setValue("$81000");
-                    lblMort.setText("Mortgage: $400");
-                    lblIns.setText("Home Insurance: $28");
-                }
-                else{
-                    cbHousing.setValue("$700");
                 }
                 lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+                lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
+            }
+            else{
+                popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
+                if(radHouse.isSelected()){
+                    String str = ((String)cbHousing.getValue()).trim().substring(1);
+                    int house = Integer.parseInt(str);
+                    GameManager.mortIns(house);
+                    lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
+                    lblHouseCost.setText("House Value:");
+                    lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
+                    lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+                }
+                lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+                lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
             }
         }
         catch (Exception ex){
@@ -444,6 +465,10 @@ public class UIManager implements Initializable {
             lblMortRent.setText("Rent: $"+Integer.toString(GameManager.mortRent));
             lblHIns.setText("Home Insurance: N/A");
         }
+        if (GameManager.savings < 0){
+            lblSavings.setTextFill(javafx.scene.paint.Color.RED);
+            lblScore.setTextFill(javafx.scene.paint.Color.RED);
+        }
     }
     
     @FXML
@@ -479,7 +504,7 @@ public class UIManager implements Initializable {
             }
             GameManager.savings+= GameManager.net;
             lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
-            GameManager.score = (int) Math.round(Math.sqrt((double)(GameManager.savings*GameManager.wellB)));
+            GameManager.score =(int) ((int) Math.round(GameManager.savings*GameManager.wellB)/(Math.sqrt((double)Math.abs(GameManager.savings*GameManager.wellB))));
             lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
             lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
             GameManager.month+=1;
@@ -500,6 +525,14 @@ public class UIManager implements Initializable {
                 case 11: lblMonth.setText("Month 11: November");break;
                 case 12: lblMonth.setText("Month 12: December");break;
             }
+            if (GameManager.savings < 0){
+                lblSavings.setTextFill(javafx.scene.paint.Color.RED);
+                lblScore.setTextFill(javafx.scene.paint.Color.RED);
+            }
+            else{
+                lblSavings.setTextFill(javafx.scene.paint.Color.BLACK);
+                lblScore.setTextFill(javafx.scene.paint.Color.BLACK);
+            }
         }
         else{
             popup("Make monthly descisions before ending the month.",(Stage)lblScore.getScene().getWindow());
@@ -509,21 +542,10 @@ public class UIManager implements Initializable {
     @FXML
     private void handle1ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
-        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
-            popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>100){
-                GameManager.wellB-=100;
-            }
-            else{
-                GameManager.wellB = 0;
-            }
-        }
-        else{
-            switch (resps){
-                case 3: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
-                case 4: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
-                case 5: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
-            }
+        switch (resps){
+            case 3: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
+            case 4: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
+            case 5: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
         }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -540,22 +562,11 @@ public class UIManager implements Initializable {
     @FXML
     private void handle2ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
-        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
-            popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>100){
-                GameManager.wellB-=100;
-            }
-            else{
-                GameManager.wellB = 0;
-            }
-        }
-        else{
-           switch (resps){
-                case 2: if(GameManager.monthly.get(qNum).cost[0]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(0);}break;
-                case 4: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
-                case 5: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
-            } 
-        }        
+        switch (resps){
+            case 2: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
+            case 4: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
+            case 5: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
+        }    
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
             if (lblPrompt != null){
@@ -571,20 +582,9 @@ public class UIManager implements Initializable {
     @FXML
     private void handle3ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
-        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
-            popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>100){
-                GameManager.wellB-=100;
-            }
-            else{
-                GameManager.wellB = 0;
-            }
-        }
-        else{
-           switch (resps){
-                case 3: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
-                case 5: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
-            } 
+        switch (resps){
+            case 3: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
+            case 5: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
         }        
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -601,21 +601,10 @@ public class UIManager implements Initializable {
     @FXML
     private void handle4ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
-        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
-            popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>100){
-                GameManager.wellB-=100;
-            }
-            else{
-                GameManager.wellB = 0;
-            }
-        }
-        else{
-            switch (resps){
-                case 2: if(GameManager.monthly.get(qNum).cost[1]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(1);}break;
-                case 4: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
-                case 5: if(GameManager.monthly.get(qNum).cost[3]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(3);}break;
-            }
+        switch (resps){
+            case 2: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
+            case 4: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
+            case 5: if(GameManager.monthly.get(qNum).cost[3]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(3);break;
         }        
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -632,21 +621,10 @@ public class UIManager implements Initializable {
     @FXML
     private void handle5ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
-        if (GameManager.monthly.get(qNum).cost[0]>GameManager.savings){
-            popup("You did not have enough savings for the least expensive choice. Score was reduced.",(Stage)((Stage)btn1.getScene().getWindow()).getOwner());
-            if(GameManager.wellB>100){
-                GameManager.wellB-=100;
-            }
-            else{
-                GameManager.wellB = 0;
-            }
-        }
-        else{
-            switch (resps){
-                case 3: if(GameManager.monthly.get(qNum).cost[2]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(2);}break;
-                case 4: if(GameManager.monthly.get(qNum).cost[3]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(3);}break;
-                case 5: if(GameManager.monthly.get(qNum).cost[4]<=GameManager.savings){GameManager.monthly.get(qNum).setResponse(4);}break;
-            }
+        switch (resps){
+            case 3: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
+            case 4: if(GameManager.monthly.get(qNum).cost[3]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(3);break;
+            case 5: if(GameManager.monthly.get(qNum).cost[4]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(4);break;
         }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -684,10 +662,14 @@ public class UIManager implements Initializable {
     }
     
     private void update(){
-        GameManager.score = (int) Math.round(Math.sqrt((double)(GameManager.savings*GameManager.wellB)));
+        GameManager.score =(int) ((int) Math.round(GameManager.savings*GameManager.wellB)/(Math.sqrt((double)Math.abs(GameManager.savings*GameManager.wellB))));
         lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
         lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
         lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
+        if (GameManager.savings < 0){
+            lblSavings.setTextFill(javafx.scene.paint.Color.RED);
+            lblScore.setTextFill(javafx.scene.paint.Color.RED);
+        }
     }
     
     private void runQuestions(){
@@ -843,11 +825,10 @@ public class UIManager implements Initializable {
         lblFWellBeing.setText("Final Well Being: " + Integer.toString(GameManager.wellB));
         lblFSal.setText("Salary: $" + Integer.toString(GameManager.gross));
         lblFDeps.setText("Number of Dependents: " + Integer.toString(GameManager.dep));
-        if (GameManager.haveHouse){
-            lblFHousing.setText("Mortgage: $" + Integer.toString(GameManager.mortRent));
-        }
-        else{
-            lblFHousing.setText("Rent: $" + Integer.toString(GameManager.mortRent));
+        if(GameManager.savings < 0){
+            lblEnd.setText("You ended in debt! Try again.");
+            lblFSavings.setTextFill(javafx.scene.paint.Color.RED);
+            lblFScore.setTextFill(javafx.scene.paint.Color.RED);
         }
     }
     

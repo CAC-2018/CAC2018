@@ -51,7 +51,7 @@ public class GameManager {
             75000,75000,85000,90000,100000,125000,200000};
         houses = new int[]{81000,101500,122000,142000,162500,183000,203250,223500,244000,264250,285000,305000,325000,366000,407000,457000,478000,508000,549000};
         apartments = new int[]{400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800};
-        deps = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        deps = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12};
     }
     
     public static void initQuestions(){
@@ -82,7 +82,7 @@ public class GameManager {
             new Question("You are going to a Thanksgiving party. You contribute",new String[]{"$25","$50","$75"},2, new int[]{25,50,75}),
             new Question("Black Friday Sale",new String[]{"Buy $100 and get $40 off","Buy $250 and get $100 off","Buy $500 and get $200 off"},1, new int[]{60,150,300}),
             new Question("You are going to a Christmas party. You contribute",new String[]{"$25","$50","$75"},2, new int[]{25,50,75}),
-            new Question("Annual membership dues are coming up (gym, church, etc)",new String[]{"$Not a member","$120 per person","$240 per person","$360 per person"},1.5, new int[]{0,120,240,360})
+            new Question("Annual membership dues are coming up (gym, church, etc)",new String[]{"Not a member","$120 per person","$240 per person","$360 per person"},1.5, new int[]{0,120,240,360})
         };
         questions[0].setScalable();
         questions[3].setScalable();
