@@ -213,7 +213,7 @@ public class UIManager implements Initializable {
         
         current = stage;
         
-        current.setTitle("Basic Finance Sim");
+        current.setTitle("Wallet Wise");
         current.setScene(startScreen);
         current.show();
     }
@@ -249,7 +249,7 @@ public class UIManager implements Initializable {
         stage.initOwner((Stage)btnHelp.getScene().getWindow());
         stage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root);
-        stage.setTitle("Basic Finance Sim Help");
+        stage.setTitle("Wallet Wise Help");
         stage.setScene(scene);
         stage.show();
     }
@@ -648,7 +648,7 @@ public class UIManager implements Initializable {
                 stage.initModality(Modality.WINDOW_MODAL);
                 Parent root = FXMLLoader.load(getClass().getResource("Desc.fxml"));
                 Scene scene = new Scene(root);
-                stage.setTitle("Basic Finance Sim");
+                stage.setTitle("Wallet Wise");
                 stage.setScene(scene);
                 stage.setOnCloseRequest((WindowEvent ev) -> {
                     update();
@@ -734,7 +734,7 @@ public class UIManager implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         Parent root = FXMLLoader.load(getClass().getResource("Box.fxml"));
         Scene scene = new Scene(root);
-        stage.setTitle("Basic Finance Sim");
+        stage.setTitle("Wallet Wise");
         stage.setScene(scene);
         stage.show();
     }

@@ -41,7 +41,7 @@
             </Button>
          </children>
       </VBox>
-      <Label fx:id="lblTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="178.0" layoutY="44.0" text="Basic Finance Sim 2018" textAlignment="CENTER">
+      <Label fx:id="lblTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="238.0" layoutY="51.0" text="Wallet Wise" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
