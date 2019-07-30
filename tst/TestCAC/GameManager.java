@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TestCAC;
+package cac2018;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +15,8 @@ import java.util.Collections;
 public class GameManager {
     public static String[] jobs;
     public static int[] salaries;
-    public static int[][] houses;
-    public static int[][] apartments;
+    public static int[] houses;
+    public static int[] apartments;
     public static int mort = 0;
     public static int homeIns = 0;
     public static int[] deps;
@@ -29,6 +29,9 @@ public class GameManager {
     public static int wellB;
     public static int mortRent;
     public static int tax;
+    public static int dep;
+    public static int ess;
+    public static int meds;
     public static Boolean haveHouse;
     
     public static int month;
@@ -36,30 +39,25 @@ public class GameManager {
     public static ArrayList<Question> monthly = new ArrayList<Question>();
     public static boolean monthDone;
     
+    public static String message;
+    
+    public static ArrayList<ArrayList<Storage>> saved = new ArrayList<ArrayList<Storage>>();
+    
     public static void initJobs(){
         jobs = new String[]{"Office Administration","Driver","Auto Tech","Welder","Lab Technician","Social Worker",
             "Electrician","Teacher","Performing Arts","Construction Foreman","Law Enforcement","Soldier",
             "Dental Hygenist","Professor","Nurse","Sportsperson","Scientist","Engineer","Lawyer","Doctor"};
         salaries = new int[]{40000,40000,45000,45000,50000,50000,55000,60000,60000,60000,65000,65000,70000,
             75000,75000,85000,90000,100000,125000,200000};
-        houses = new int[][]{{81000,101500},{81000,101500},{81000,101500,122000},{81000,101500,122000},
-            {101500,122000,142000,162500},{101500,122000,142000,162500},{122000,142000,162500},
-            {122000,142000,162500,183000},{122000,142000,162500,183000},{122000,142000,162500,183000},
-            {142000,162500,183000,203250},{142000,162500,183000,203250},{142000,162500,183000,203250,223500},
-            {162500,183000,203250,233500,244000},{162500,183000,203250,233500,244000},
-            {183000,203250,223500,244000,264250},{183000,203250,223500,244000,264250},
-            {203250,223500,244000,264250,285000,305000},{223500,244000,264250,285000,305000,325000,366000},
-            {285000,305000,325000,366000,407000,457000,478000,508000,549000}};
-        apartments = new int[][]{{400},{400},{400,500},{400,500},{400,500,600},{400,500,600},{500,600},
-            {500,600,700},{500,600,700},{500,600,700},{600,700,800},{600,700,800},{600,700,800},
-            {700,800,900},{700,800,900},{800,900,1000,1100},{800,900,1000,1100},{800,900,1000,1100,1200},
-            {1000,1100,1200,1300,1400},{1300,1400,1500,1600,1700,1800}};
+        houses = new int[]{81000,101500,122000,142000,162500,183000,203250,223500,244000,264250,285000,305000,325000,366000,407000,457000,478000,508000,549000};
+        apartments = new int[]{400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800};
+        deps = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12};
     }
     
     public static void initQuestions(){
         questions = new Question[]{new Question("You plan on going out to dinner",new String[]{"Not tonight","At a fastfood joint ($5 per person)","At a family restaurant ($12 per person)", "At a fine dining restaurant ($20 per person)"},2, new int[]{0,5,12,20}),
             new Question("Would you like to buy coffee on your way to work?",new String[]{"Not today","Yes ($3)"},1, new int[]{0,3}),
-            new Question("Would you like to join your friends for lunch?",new String[]{"Not today", "At a foodtruck ($8)","At a foodtruck ($15)"},2, new int[]{0,8,15}),
+            new Question("Would you like to join your friends for lunch?",new String[]{"Not today", "At a foodtruck ($8)","At a cafe ($15)"},2, new int[]{0,8,15}),
             new Question("A movie that you wanted to watch has just released. Do you want to go?",new String[]{"Not today","Buy tickets ($10 per person)", "Buy tickets, soda, and popcorn ($13 per person)"},2, new int[]{0,10,13}),
             new Question("You want to get a haircut",new String[]{"Not today", "Get a haircut ($15)","Get an appointment with a stylist ($50)"},1, new int[]{0,15,50}),
             new Question("Your favorite band is playing and you want to go",new String[]{"Not today","Yes, taking my significant other ($100)"},2.5, new int[]{0,100}),
@@ -84,7 +82,7 @@ public class GameManager {
             new Question("You are going to a Thanksgiving party. You contribute",new String[]{"$25","$50","$75"},2, new int[]{25,50,75}),
             new Question("Black Friday Sale",new String[]{"Buy $100 and get $40 off","Buy $250 and get $100 off","Buy $500 and get $200 off"},1, new int[]{60,150,300}),
             new Question("You are going to a Christmas party. You contribute",new String[]{"$25","$50","$75"},2, new int[]{25,50,75}),
-            new Question("Annual membership dues are coming up (gym, church, etc)",new String[]{"$Not a member","$120 per person","$240 per person","$360 per person"},1.5, new int[]{0,120,240,360})
+            new Question("Annual membership dues are coming up (gym, church, etc)",new String[]{"Not a member","$120 per person","$240 per person","$360 per person"},1.5, new int[]{0,120,240,360})
         };
         questions[0].setScalable();
         questions[3].setScalable();
@@ -94,19 +92,25 @@ public class GameManager {
         questions[27].setScalable();
     }
     
+    public static void initSaved(){
+        for (int i = 0; i < 12; i++){
+            saved.add(new ArrayList<Storage>());
+        }
+    }
+    
     public static void setMonthly(){
         int nums[] = new int[]{};
         monthly.clear();
-        monthly.add(questions[0]);
-        monthly.add(questions[0]);
-        monthly.add(questions[1]);
-        monthly.add(questions[1]);
-        monthly.add(questions[1]);
-        monthly.add(questions[1]);
-        monthly.add(questions[2]);
-        monthly.add(questions[2]);
-        monthly.add(questions[3]);
-        monthly.add(questions[4]);
+        monthly.add(new Question(questions[0]));
+        monthly.add(new Question(questions[0]));
+        monthly.add(new Question(questions[1]));
+        monthly.add(new Question(questions[1]));
+        monthly.add(new Question(questions[1]));
+        monthly.add(new Question(questions[1]));
+        monthly.add(new Question(questions[2]));
+        monthly.add(new Question(questions[2]));
+        monthly.add(new Question(questions[3]));
+        monthly.add(new Question(questions[4]));
         switch (month){
             case 1: nums = new int[]{5,6};break;
             case 2: nums = new int[]{7,8};break;
@@ -127,17 +131,57 @@ public class GameManager {
         Collections.shuffle(monthly);
     }
     
-    public static void initGame(int ind, Boolean h, int hou, int dep){
+    public static Boolean check(int i, int d, int h, Boolean hou){
+        int sal = salaries[i];
+        int costs = 0;
+        costs += (d+1)*1100;
+        if (hou){
+            mortIns(h);
+            costs += mort;
+            costs += homeIns;
+        }
+        else{
+            costs += h;
+        }
+        costs += tax(sal);
+        if (costs > (sal/12)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    public static int calc(int i, int d, int h, Boolean hou){
+        int sal = salaries[i];
+        int costs = 0;
+        costs += (d+1)*1100;
+        if (hou){
+            mortIns(h);
+            costs += mort;
+            costs += homeIns;
+        }
+        else{
+            costs += h;
+        }
+        costs += tax(sal);
+        return costs;
+    }
+    
+    public static void initGame(int ind, Boolean h, int hou, int d){
+        meds = 300 * (d+1);
+        ess = 800 * (d+1);
+        dep = d;
         gross = Math.round((salaries[ind])/12);
         haveHouse = h;
-        net = gross - 1100;
+        net = gross - (1100*(dep+1));
         if (haveHouse){
-            mortIns(houses[ind][hou]);
+            mortIns(houses[hou]);
             mortRent = mort;
             net -= mort + homeIns;
         }
         else{
-            mortRent = apartments[ind][hou];
+            mortRent = apartments[hou];
             net -= mortRent;
         }
         tax(salaries[ind]);
@@ -147,9 +191,10 @@ public class GameManager {
         score = 0;
         wellB = 0;
         month = 1;
+        setMonthly();
     }
     
-    public static int tax (int inc){
+    public static int tax(int inc){
         switch (inc){
             case 40000: tax = 63;break;
             case 45000: tax = 96;break;
@@ -192,21 +237,6 @@ public class GameManager {
             case 508000: mort = 2500;break;
             case 549000: mort = 2700;break;
             default: mort = 0; break;
-        }
-    }
-    
-    public static void calcDeps(int sal){
-        if (sal < 50000){
-            deps = new int[]{0,1};        
-        }
-        else if (sal < 65000){
-            deps = new int[]{0,1,2};
-        }
-        else if (sal < 75000){
-            deps = new int[]{0,1,2,3,4};
-        }
-        else {
-            deps = new int[]{0,1,2,3,4,5,6};
         }
     }
 }

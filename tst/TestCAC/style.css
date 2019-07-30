@@ -1,0 +1,17 @@
+/* CSS file for all CAC2018 windows. */
+
+AnchorPane {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #98fb98);
+}
+
+.button, .tab, .choice-box, .radio {
+    -fx-background-color: linear-gradient(to bottom, #fdfaf6, #90ec90);
+}
+
+.button:hover, .tab:hover, .choice-box:hover, .radio:hover {
+    -fx-background-color: linear-gradient(to bottom, #fdfcfb, #94f394);
+}
+
+.button:pressed, .tab:pressed, .choice-box:pressed, .radio:pressed {
+    -fx-background-color: linear-gradient(to bottom, #90ec90, #fdfaf6);
+}
