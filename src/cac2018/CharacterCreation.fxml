@@ -96,7 +96,7 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </ChoiceBox>
-            <Button fx:id="btnPlay" alignment="CENTER" mnemonicParsing="false" onAction="#handlePlayButtonAction" prefHeight="27.0" prefWidth="60.0" text="Play">
+            <Button fx:id="btnToCredit" alignment="CENTER" mnemonicParsing="false" onAction="#handleToCreditButtonAction" prefHeight="27.0" prefWidth="60.0" text="Next">
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>

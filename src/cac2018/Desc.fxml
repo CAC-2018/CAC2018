@@ -45,11 +45,12 @@
                <font>
                   <Font size="10.0" />
                </font></Button>
-            <Label fx:id="lblPrompt" alignment="CENTER" contentDisplay="CENTER" text="A dear friend if having" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label fx:id="lblPrompt" alignment="CENTER" contentDisplay="CENTER" text="Question" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
+            <RadioButton fx:id="radCard" mnemonicParsing="false" onAction="#handleRadCardAction" text="Use Credit Card?" textOverrun="CLIP" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>
