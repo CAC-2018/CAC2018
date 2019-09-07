@@ -23,6 +23,7 @@ public class CAC2018 extends Application {
     public void start(Stage stage) throws Exception {
         UiMan.startUI(stage);
         GameManager.initJobs();
+        GameManager.initCards();
         GameManager.initQuestions();
         GameManager.initSaved();
     }

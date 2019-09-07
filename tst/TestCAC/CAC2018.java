@@ -1,14 +1,11 @@
-/* This is the test class that will be used to test the application.
+/* This is the main class that will be used to run the application.
  * Avoid writing the majority of code in main and instead use calls
  * 	to other classes and methods.
- * First try out new changes here and later update them to the Main
- * 	class in the source folder if they are satisfactory.
  */
 
-package TestCAC;
+package cac2018;
 
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +15,7 @@ import javafx.stage.Stage;
  *
  * @author nikhi
  */
-public class TestCAC extends Application {
+public class CAC2018 extends Application {
     
     UIManager UiMan = new UIManager();
     
@@ -27,6 +24,7 @@ public class TestCAC extends Application {
         UiMan.startUI(stage);
         GameManager.initJobs();
         GameManager.initQuestions();
+        GameManager.initSaved();
     }
 
     /**
@@ -34,6 +32,5 @@ public class TestCAC extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
+    }    
 }

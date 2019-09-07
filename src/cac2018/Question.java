@@ -37,7 +37,7 @@ public class Question {
         scalable = q.scalable;
     }
     
-    public void setResponse(int i){
+    public void setResponse(int i, boolean credit){
         response = i;
         answered = true;
         int c;
@@ -50,7 +50,13 @@ public class Question {
             c = cost[i];
             g = (int) Math.round(multiplier*cost[i]);
         }
-        GameManager.savings -= c;
+        if (credit){
+            GameManager.available -= c;
+            GameManager.bills += c;
+        }
+        else{
+            GameManager.savings -= c;
+        }
         GameManager.wellB += g;
         GameManager.saved.get(GameManager.month-1).add(new Storage(prompt,answers[i],c,g));
     }

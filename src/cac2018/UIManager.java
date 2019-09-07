@@ -5,14 +5,13 @@
  */
 package cac2018;
 
-import java.awt.Color;
-import java.awt.Paint;
-import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +25,8 @@ import javafx.stage.Stage;
 import javafx.scene.control.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.stage.WindowEvent;
 
 /**
@@ -39,6 +40,9 @@ public class UIManager implements Initializable {
     
     @FXML
     private Button btnPlay;
+    
+    @FXML
+    private Button btnToCredit;
     
     @FXML
     private Button btnHelp;
@@ -68,12 +72,6 @@ public class UIManager implements Initializable {
     private Label lblMort;
     
     @FXML
-    private Label lblEssentials;
-    
-    @FXML
-    private Label lblMeds;
-    
-    @FXML
     private Label lblIns;
     
     @FXML
@@ -84,18 +82,6 @@ public class UIManager implements Initializable {
     
     @FXML
     private Label lblMCosts;
-    
-    @FXML
-    private Label lblNet;
-    
-    @FXML
-    private Label lblMortRent;
-    
-    @FXML
-    private Label lblHIns;
-    
-    @FXML
-    private Label lblTax;
     
     @FXML
     private Label lblSavings;
@@ -143,10 +129,13 @@ public class UIManager implements Initializable {
     private Label lblFSal;
     
     @FXML
-    private Label lblFHousing;
+    private Label lblFDeps;
     
     @FXML
-    private Label lblFDeps;
+    private Label lblGoldLimit;
+    
+    @FXML
+    private Label lblPlatLimit;
     
     @FXML
     private Button btn1;
@@ -199,6 +188,36 @@ public class UIManager implements Initializable {
     @FXML
     private ListView lstDec;
     
+    @FXML
+    private RadioButton radGoldCard;
+    
+    @FXML
+    private RadioButton radPlatCard;
+    
+    @FXML
+    private Label lblDue;
+    
+    @FXML
+    private Label lblAvailable;
+    
+    @FXML
+    private Label lblCredit;
+    
+    @FXML
+    private Label lblCredAmt;
+    
+    @FXML
+    private Label lblMinPay;
+    
+    @FXML
+    private Label lblInterest;
+    
+    @FXML 
+    private Slider sldPayCred;
+    
+    @FXML
+    private RadioButton radCard;
+    
     private Question currentQ;
     
     private int qNum;
@@ -212,6 +231,8 @@ public class UIManager implements Initializable {
         Scene startScreen = new Scene(root);
         
         current = stage;
+        
+        current.setResizable(false);
         
         current.setTitle("Wallet Wise");
         current.setScene(startScreen);
@@ -227,6 +248,12 @@ public class UIManager implements Initializable {
     @FXML
     private void handleBackCCButtonAction(ActionEvent event) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("StartScreen.fxml"));
+        btnPlay.getScene().setRoot(root);
+    }
+    
+    @FXML
+    private void handleBackCreditButtonAction(ActionEvent event) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("CharacterCreation.fxml"));
         btnPlay.getScene().setRoot(root);
     }
     
@@ -267,7 +294,7 @@ public class UIManager implements Initializable {
     }
     
     @FXML
-    private void handlePlayButtonAction(ActionEvent event) throws Exception{
+    private void handleToCreditButtonAction(ActionEvent event) throws Exception{
         try{
             int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
             int value = Integer.parseInt(((String)cbHousing.getValue()).trim().substring(1)); 
@@ -281,7 +308,32 @@ public class UIManager implements Initializable {
                 housing = getArrayIndex(GameManager.apartments,value);
             }
             int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
-            GameManager.initGame(index, house, housing, deps);
+            GameManager.dep = deps;
+            GameManager.housing = housing;
+            GameManager.haveHouse = house;
+            GameManager.index = index;
+            
+            Parent root = FXMLLoader.load(getClass().getResource("CreditCard.fxml"));
+            btnToCredit.getScene().setRoot(root);
+        }
+        catch (Exception ex){
+            System.out.println(ex.toString()+" @handleToCreditButtonAction,UIManager");
+            System.out.println(ex.getCause());
+        }
+    }
+    
+    @FXML
+    private void handlePlayButtonAction(ActionEvent event) throws Exception{
+        try{
+            int card = 0;
+            if (radGoldCard.isSelected()){
+                card = 1;
+            }
+            else if (radPlatCard.isSelected()){
+                card = 2;
+            }
+            GameManager.cardStatus = card;
+            GameManager.initGame();
             Parent root = FXMLLoader.load(getClass().getResource("Game.fxml"));
             btnPlay.getScene().setRoot(root);
         }
@@ -289,6 +341,16 @@ public class UIManager implements Initializable {
             System.out.println(ex.toString()+" @handlePlayButtonAction,UIManager");
             System.out.println(ex.getCause());
         }
+    }
+    
+    private void initCards(){
+        int ind = GameManager.index;
+        int cardTier = GameManager.cardChoice[ind];
+        int goldLimit = GameManager.goldCards[cardTier];
+        int platLimit = GameManager.platCards[cardTier];
+        
+        lblGoldLimit.setText("$"+Integer.toString(goldLimit));
+        lblPlatLimit.setText("$"+Integer.toString(platLimit));
     }
     
     private void initCC(){
@@ -309,59 +371,41 @@ public class UIManager implements Initializable {
     }
     
     @FXML
-    private void handleJobChoiceAction(ActionEvent event) throws Exception{   
+    private void handleJobChoiceAction(ActionEvent event) throws Exception{
+        int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
+        lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
+        lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
+        lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
+        lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
         if(checkEx()){
-            int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
-            lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
-            lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
-            lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
-            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
+            btnToCredit.disableProperty().set(false);
         }
         else{
-            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
-            int index = java.util.Arrays.asList(GameManager.jobs).indexOf(cbProfession.getValue());
-            lblSal.setText("Yearly Salary: $" + Integer.toString(GameManager.salaries[index]));
-            lblMonSal.setText("Monthly Salary: $" + Integer.toString((int)(GameManager.salaries[index]/12)));
-            lblMonthTax.setText("Tax: $" + Integer.toString(GameManager.tax(GameManager.salaries[index]))+"/month");
-            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
+            popup("Your monthly expenses exceed your monthly salary. Monthly salary must exceed expenses to proceed.",(Stage)lblSal.getScene().getWindow());
+            btnToCredit.disableProperty().set(true);
         }
     }
     
     @FXML
     private void handleHouseRadAction(ActionEvent event) throws Exception{
+        List<String> list = new ArrayList<String>();
+        ObservableList houses = FXCollections.observableList(list);
+        for (int house: GameManager.houses){
+            houses.add("$"+Integer.toString(house));
+        }
+        cbHousing.setItems(houses);
+        cbHousing.setValue(houses.get(0));
+        GameManager.mortIns(GameManager.houses[0]);
+        lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
+        lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
+        lblHouseCost.setText("House Value:");
+        tltHousing.setText("House Value ($)");
         if(checkEx()){
-            List<String> list = new ArrayList<String>();
-            ObservableList houses = FXCollections.observableList(list);
-            for (int house: GameManager.houses){
-                houses.add("$"+Integer.toString(house));
-            }
-            cbHousing.setItems(houses);
-            cbHousing.setValue(houses.get(0));
-            GameManager.mortIns(GameManager.houses[0]);
-            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
-            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
-            lblHouseCost.setText("House Value:");
-            tltHousing.setText("House Value ($)");
-            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
+            btnToCredit.disableProperty().set(false);
         }
         else{
-            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
-            List<String> list = new ArrayList<String>();
-            ObservableList houses = FXCollections.observableList(list);
-            for (int house: GameManager.houses){
-                houses.add("$"+Integer.toString(house));
-            }
-            cbHousing.setItems(houses);
-            cbHousing.setValue(houses.get(0));
-            GameManager.mortIns(GameManager.houses[0]);
-            lblMort.setText("Mortgage: $"+Integer.toString(GameManager.mort)+"/month");
-            lblIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns)+"/month");
-            lblHouseCost.setText("House Value:");
-            tltHousing.setText("House Value ($)");
-            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
+            popup("Your monthly expenses exceed your monthly salary. Monthly salary must exceed expenses to proceed.",(Stage)lblSal.getScene().getWindow());
+            btnToCredit.disableProperty().set(true);
         }
     }
     
@@ -383,49 +427,37 @@ public class UIManager implements Initializable {
     
     @FXML
     private void handleDepChoiceAction(ActionEvent event) throws Exception{
+        int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
+        lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
+        lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
+        lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
         if(checkEx()){
-            int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
-            lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
-            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-            lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
+            btnToCredit.disableProperty().set(false);
         }
         else{
-            popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
-            int deps = Integer.parseInt(((String)cbDependants.getValue()).trim());
-            lblTotDep.setText("Total Cost of Living: $"+Integer.toString((deps+1)*1100)+"/month");
-            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-            lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
+            popup("Your monthly expenses exceed your monthly salary. Monthly salary must exceed expenses to proceed.",(Stage)lblSal.getScene().getWindow());
+            btnToCredit.disableProperty().set(true);
         }
     }
     
     @FXML
     private void handleHouseChoiceAction(ActionEvent event) throws Exception{
         try{
+            if(radHouse.isSelected()){
+                String str = ((String)cbHousing.getValue()).trim().substring(1);
+                int house = Integer.parseInt(str);
+                GameManager.mortIns(house);
+                lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
+                lblHouseCost.setText("House Value:");
+                lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
+            }
+            lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
             if(checkEx()){
-                if(radHouse.isSelected()){
-                    String str = ((String)cbHousing.getValue()).trim().substring(1);
-                    int house = Integer.parseInt(str);
-                    GameManager.mortIns(house);
-                    lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
-                    lblHouseCost.setText("House Value:");
-                    lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
-                }
-                lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-                lblTotCost.setTextFill(javafx.scene.paint.Color.BLACK);
+                btnToCredit.disableProperty().set(false);
             }
             else{
-                popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)lblSal.getScene().getWindow());
-                if(radHouse.isSelected()){
-                    String str = ((String)cbHousing.getValue()).trim().substring(1);
-                    int house = Integer.parseInt(str);
-                    GameManager.mortIns(house);
-                    lblMort.setText("Mortgage: $" + GameManager.mort+"/month");
-                    lblHouseCost.setText("House Value:");
-                    lblIns.setText("Home Insurance: $" + GameManager.homeIns+"/month");
-                    lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-                }
-                lblTotCost.setText("Total Monthly Cost: $"+Integer.toString(calcTot()));
-                lblTotCost.setTextFill(javafx.scene.paint.Color.RED);
+                popup("Your monthly expenses exceed your monthly salary. Monthly salary must exceed expenses to proceed.",(Stage)lblSal.getScene().getWindow());
+                btnToCredit.disableProperty().set(true);
             }
         }
         catch (Exception ex){
@@ -452,23 +484,42 @@ public class UIManager implements Initializable {
     private void firstLoad() throws InterruptedException{
         lblGross.setText("Monthly Salary: $"+Integer.toString(GameManager.gross));
         lblMCosts.setText("Monthly Costs: $"+Integer.toString(GameManager.fixed));
-        lblNet.setText("Net Monthly Income: $"+Integer.toString(GameManager.net));
-        lblTax.setText("Taxes: $"+Integer.toString(GameManager.tax));
         lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
-        lblEssentials.setText("Food, Colothing, & Essentials: $"+Integer.toString(GameManager.ess));
-        lblMeds.setText("Medical: $"+Integer.toString(GameManager.meds));
-        if (GameManager.haveHouse){
-            lblMortRent.setText("Mortgage: $"+Integer.toString(GameManager.mortRent));
-            lblHIns.setText("Home Insurance: $"+Integer.toString(GameManager.homeIns));
+        sldPayCred.minProperty().set(0);
+        sldPayCred.maxProperty().set(0);
+        if (GameManager.cardStatus == 0){
+            lblDue.disableProperty().set(true);
+            lblAvailable.disableProperty().set(true);
+            lblCredit.disableProperty().set(true);
+            lblCredAmt.disableProperty().set(true);
+            lblMinPay.disableProperty().set(true);
+            lblInterest.disableProperty().set(true);
+            sldPayCred.disableProperty().set(true);
+            lblDue.visibleProperty().set(false);
+            lblAvailable.visibleProperty().set(false);
+            lblCredit.visibleProperty().set(false);
+            lblCredAmt.visibleProperty().set(false);
+            lblMinPay.visibleProperty().set(false);
+            lblInterest.visibleProperty().set(false);
+            sldPayCred.visibleProperty().set(false);
         }
         else{
-            lblMortRent.setText("Rent: $"+Integer.toString(GameManager.mortRent));
-            lblHIns.setText("Home Insurance: N/A");
+            lblAvailable.textProperty().set("Available Credit: $"+String.format("%.2f",GameManager.available));
+            lblInterest.textProperty().set("Monthly Interest: "+Double.toString(GameManager.interest)+"%");
         }
-        if (GameManager.savings < 0){
-            lblSavings.setTextFill(javafx.scene.paint.Color.RED);
-            lblScore.setTextFill(javafx.scene.paint.Color.RED);
-        }
+        
+        sldPayCred.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue source, Object oldValue, Object newValue){
+                lblCredAmt.textProperty().setValue(String.format("$%.2f",sldPayCred.getValue()));
+            }
+        });
+    }
+    
+    @FXML
+    private void handleCredSliderAction(ActionEvent event) throws Exception{
+        double value = sldPayCred.valueProperty().get();
+        lblCredAmt.textProperty().set("$"+String.format("%.2f",value));        
     }
     
     @FXML
@@ -498,6 +549,7 @@ public class UIManager implements Initializable {
     @FXML
     private void handleNextButtonAction(ActionEvent event) throws Exception{
         if(GameManager.monthDone){
+            GameManager.crunchCredit(sldPayCred.valueProperty().get());
             if (GameManager.month == 12){
                 Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
                 lblScore.getScene().setRoot(root);
@@ -507,6 +559,20 @@ public class UIManager implements Initializable {
             GameManager.score =(int) ((int) Math.round(GameManager.savings*GameManager.wellB)/(Math.sqrt((double)Math.abs(GameManager.savings*GameManager.wellB))));
             lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
             lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
+            lblAvailable.textProperty().set("Available Credit: $"+String.format("%.2f",GameManager.available));
+            lblDue.textProperty().set("Credit Card Bill: $"+String.format("%.2f",GameManager.bills));
+            lblMinPay.textProperty().set("Min. Payment: $"+String.format("%.2f",GameManager.bills/10));
+            sldPayCred.minProperty().set(GameManager.bills/10);
+            if (GameManager.savings > GameManager.bills){
+                sldPayCred.maxProperty().set(GameManager.bills);
+            }
+            else{
+                sldPayCred.maxProperty().set(GameManager.savings);
+            }
+            if (GameManager.savings < (GameManager.bills/10)){
+                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                lblScore.getScene().setRoot(root);
+            }
             GameManager.month+=1;
             GameManager.monthDone = false;
             GameManager.setMonthly();
@@ -525,14 +591,6 @@ public class UIManager implements Initializable {
                 case 11: lblMonth.setText("Month 11: November");break;
                 case 12: lblMonth.setText("Month 12: December");break;
             }
-            if (GameManager.savings < 0){
-                lblSavings.setTextFill(javafx.scene.paint.Color.RED);
-                lblScore.setTextFill(javafx.scene.paint.Color.RED);
-            }
-            else{
-                lblSavings.setTextFill(javafx.scene.paint.Color.BLACK);
-                lblScore.setTextFill(javafx.scene.paint.Color.BLACK);
-            }
         }
         else{
             popup("Make monthly descisions before ending the month.",(Stage)lblScore.getScene().getWindow());
@@ -540,12 +598,314 @@ public class UIManager implements Initializable {
     }
     
     @FXML
+    private void handleRadCardAction(ActionEvent event) throws Exception{
+        switch (currentQ.answers.length){
+            case 2:
+                if (radCard.selectedProperty().get()){
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.available){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                    }
+                }
+                else{
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.savings){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                    }
+                }
+                break;           
+            case 3:
+                if (radCard.selectedProperty().get()){
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                            btn3.disableProperty().set(false);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.available){
+                            btn3.disableProperty().set(true);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.available){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                else{
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings){
+                            btn3.disableProperty().set(false);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.savings){
+                            btn3.disableProperty().set(true);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.savings){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                break;  
+            case 4:
+                if (radCard.selectedProperty().get()){
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                            btn2.disableProperty().set(false);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.available){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.available){
+                            btn2.disableProperty().set(true);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.available){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[4]>GameManager.available){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                else{
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings){
+                            btn2.disableProperty().set(false);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.savings){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.savings){
+                            btn2.disableProperty().set(true);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.savings){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]>GameManager.savings){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                break;
+            case 5:
+                if (radCard.selectedProperty().get()){
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                            btn2.disableProperty().set(false);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                            btn3.disableProperty().set(false);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.available){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[4]*(GameManager.dep+1)>GameManager.available){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.available){
+                            btn2.disableProperty().set(true);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.available){
+                            btn3.disableProperty().set(true);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]>GameManager.available){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[4]>GameManager.available){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                else{
+                    if (currentQ.scalable){
+                        if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings){
+                            btn2.disableProperty().set(false);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings){
+                            btn3.disableProperty().set(false);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.savings){
+                            btn4.disableProperty().set(false);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[4]*(GameManager.dep+1)>GameManager.savings){
+                            btn5.disableProperty().set(false);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                    else{
+                        if (currentQ.cost[1]>GameManager.savings){
+                            btn2.disableProperty().set(true);
+                        }
+                        else{
+                            btn2.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[2]>GameManager.savings){
+                            btn3.disableProperty().set(true);
+                        }
+                        else{
+                            btn3.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[3]>GameManager.savings){
+                            btn4.disableProperty().set(true);
+                        }
+                        else{
+                            btn4.disableProperty().set(false);
+                        }
+                        if (currentQ.cost[4]>GameManager.savings){
+                            btn5.disableProperty().set(true);
+                        }
+                        else{
+                            btn5.disableProperty().set(false);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+    
+    @FXML
     private void handle1ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
         switch (resps){
-            case 3: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
-            case 4: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
-            case 5: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
+            case 3: GameManager.monthly.get(qNum).setResponse(0,radCard.selectedProperty().get());break;
+            case 4: GameManager.monthly.get(qNum).setResponse(0,radCard.selectedProperty().get());break;
+            case 5: GameManager.monthly.get(qNum).setResponse(0,radCard.selectedProperty().get());break;
         }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -560,13 +920,13 @@ public class UIManager implements Initializable {
     }
 
     @FXML
-    private void handle2ButtonAction(ActionEvent event) throws Exception{
+    private void handle2ButtonAction(ActionEvent event) throws Exception{ 
         int resps = GameManager.monthly.get(qNum).answers.length;
         switch (resps){
-            case 2: if(GameManager.monthly.get(qNum).cost[0]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(0);break;
-            case 4: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
-            case 5: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
-        }    
+            case 2: GameManager.monthly.get(qNum).setResponse(0,radCard.selectedProperty().get());break;
+            case 4: GameManager.monthly.get(qNum).setResponse(1,radCard.selectedProperty().get());break;
+            case 5: GameManager.monthly.get(qNum).setResponse(1,radCard.selectedProperty().get());break;
+        }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
             if (lblPrompt != null){
@@ -583,9 +943,9 @@ public class UIManager implements Initializable {
     private void handle3ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
         switch (resps){
-            case 3: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
-            case 5: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
-        }        
+            case 3: GameManager.monthly.get(qNum).setResponse(1,radCard.selectedProperty().get());break;
+            case 5: GameManager.monthly.get(qNum).setResponse(2,radCard.selectedProperty().get());break;
+        }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
             if (lblPrompt != null){
@@ -602,10 +962,10 @@ public class UIManager implements Initializable {
     private void handle4ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
         switch (resps){
-            case 2: if(GameManager.monthly.get(qNum).cost[1]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(1);break;
-            case 4: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
-            case 5: if(GameManager.monthly.get(qNum).cost[3]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(3);break;
-        }        
+            case 2: GameManager.monthly.get(qNum).setResponse(1,radCard.selectedProperty().get());break;
+            case 4: GameManager.monthly.get(qNum).setResponse(2,radCard.selectedProperty().get());break;
+            case 5: GameManager.monthly.get(qNum).setResponse(3,radCard.selectedProperty().get());break;
+        }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
             if (lblPrompt != null){
@@ -622,9 +982,9 @@ public class UIManager implements Initializable {
     private void handle5ButtonAction(ActionEvent event) throws Exception{
         int resps = GameManager.monthly.get(qNum).answers.length;
         switch (resps){
-            case 3: if(GameManager.monthly.get(qNum).cost[2]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(2);break;
-            case 4: if(GameManager.monthly.get(qNum).cost[3]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(3);break;
-            case 5: if(GameManager.monthly.get(qNum).cost[4]>GameManager.savings){popup("Your monthly expenses exceed your monthly salary. Proceed with caution.",(Stage)btn1.getScene().getWindow());}GameManager.monthly.get(qNum).setResponse(4);break;
+            case 3: GameManager.monthly.get(qNum).setResponse(2,radCard.selectedProperty().get());break;
+            case 4: GameManager.monthly.get(qNum).setResponse(3,radCard.selectedProperty().get());break;
+            case 5: GameManager.monthly.get(qNum).setResponse(4,radCard.selectedProperty().get());break;
         }
         if (qNum == (GameManager.monthly.size()-1)){
             GameManager.monthDone = true;
@@ -651,7 +1011,11 @@ public class UIManager implements Initializable {
                 stage.setTitle("Wallet Wise");
                 stage.setScene(scene);
                 stage.setOnCloseRequest((WindowEvent ev) -> {
-                    update();
+                    try {
+                        update();
+                    } catch (Exception ex) {
+                        Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 });
                 stage.show();
             }
@@ -661,18 +1025,29 @@ public class UIManager implements Initializable {
         }
     }
     
-    private void update(){
+    private void update() throws Exception{
         GameManager.score =(int) ((int) Math.round(GameManager.savings*GameManager.wellB)/(Math.sqrt((double)Math.abs(GameManager.savings*GameManager.wellB))));
         lblSavings.setText("Balance: $"+Integer.toString(GameManager.savings));
         lblHappiness.setText("Wellness Index: "+Integer.toString(GameManager.wellB));
         lblScore.setText("Game Score: "+Integer.toString(GameManager.score));
-        if (GameManager.savings < 0){
-            lblSavings.setTextFill(javafx.scene.paint.Color.RED);
-            lblScore.setTextFill(javafx.scene.paint.Color.RED);
+        lblAvailable.textProperty().set("Available Credit: $"+String.format("%.2f",GameManager.available));
+        lblDue.textProperty().set("Credit Card Bill: $"+String.format("%.2f",GameManager.bills));
+        lblMinPay.textProperty().set("Min. Payment: $"+String.format("%.2f",GameManager.bills/10));
+        sldPayCred.minProperty().set(GameManager.bills/10);
+        sldPayCred.valueProperty().set(GameManager.bills/10);
+        if (GameManager.savings > GameManager.bills){
+            sldPayCred.maxProperty().set(GameManager.bills);
+        }
+        else{
+            sldPayCred.maxProperty().set(GameManager.savings);
+        }
+        if (GameManager.savings < (GameManager.bills/10)){
+            Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+            lblScore.getScene().setRoot(root);
         }
     }
     
-    private void runQuestions(){
+    private void runQuestions() throws Exception{
         int reps = GameManager.monthly.size();
         for (int i = 0; i < reps; i++){
             if (!GameManager.monthly.get(i).answered){
@@ -683,6 +1058,53 @@ public class UIManager implements Initializable {
                         lblPrompt.setText(currentQ.prompt);
                         btn2.setText(currentQ.answers[0]);
                         btn4.setText(currentQ.answers[1]);
+                        if (currentQ.scalable){
+                            if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                                ((Stage) lblPrompt.getScene().getWindow()).getOwner().getScene().setRoot(root);
+                                Stage stage = (Stage) lblPrompt.getScene().getWindow();
+                                stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[0]>GameManager.savings && currentQ.cost[0]>GameManager.available){
+                            
+                            }
+                            else if (currentQ.cost[0]>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        if (currentQ.scalable){
+                            if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[1]>GameManager.savings && currentQ.cost[1]>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                        }
                         break;
                     case 3: btn1.setDisable(false); btn2.setDisable(true); btn3.setDisable(false); btn4.setDisable(true); btn5.setDisable(false);
                         btn1.setVisible(true); btn2.setVisible(false); btn3.setVisible(true); btn4.setVisible(false); btn5.setVisible(true);
@@ -690,6 +1112,59 @@ public class UIManager implements Initializable {
                         btn1.setText(currentQ.answers[0]);
                         btn3.setText(currentQ.answers[1]);
                         btn5.setText(currentQ.answers[2]);
+                        if (currentQ.scalable){
+                            if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                                ((Stage) lblPrompt.getScene().getWindow()).getOwner().getScene().setRoot(root);
+                                Stage stage = (Stage) lblPrompt.getScene().getWindow();
+                                stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[0]>GameManager.savings && currentQ.cost[0]>GameManager.available){
+                            
+                            }
+                            else if (currentQ.cost[0]>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        if (currentQ.scalable){
+                            if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                                btn3.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[1]>GameManager.savings && currentQ.cost[1]>GameManager.available){
+                                btn3.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]>GameManager.savings && currentQ.cost[2]>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
                         break;
                     case 4: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(true); btn4.setDisable(false); btn5.setDisable(false);
                         btn1.setVisible(true); btn2.setVisible(true); btn3.setVisible(false); btn4.setVisible(true); btn5.setVisible(true);
@@ -698,6 +1173,68 @@ public class UIManager implements Initializable {
                         btn2.setText(currentQ.answers[1]);
                         btn4.setText(currentQ.answers[2]);
                         btn5.setText(currentQ.answers[3]);
+                        if (currentQ.scalable){
+                            if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                                ((Stage) lblPrompt.getScene().getWindow()).getOwner().getScene().setRoot(root);
+                                Stage stage = (Stage) lblPrompt.getScene().getWindow();
+                                stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[0]>GameManager.savings && currentQ.cost[0]>GameManager.available){
+                                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                                ((Stage) lblPrompt.getScene().getWindow()).getOwner().getScene().setRoot(root);
+                                Stage stage = (Stage) lblPrompt.getScene().getWindow();
+                                stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                            }
+                            else if (currentQ.cost[0]>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        if (currentQ.scalable){
+                            if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                                btn2.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[3]*(GameManager.dep+1)>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[1]>GameManager.savings && currentQ.cost[1]>GameManager.available){
+                                btn2.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]>GameManager.savings && currentQ.cost[2]>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[3]>GameManager.savings && currentQ.cost[3]>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
                         break;
                     case 5: btn1.setDisable(false); btn2.setDisable(false); btn3.setDisable(false); btn4.setDisable(false); btn5.setDisable(false);
                         btn1.setVisible(true); btn2.setVisible(true); btn3.setVisible(true); btn4.setVisible(true); btn5.setVisible(true);
@@ -707,6 +1244,71 @@ public class UIManager implements Initializable {
                         btn3.setText(currentQ.answers[2]);
                         btn4.setText(currentQ.answers[3]);
                         btn5.setText(currentQ.answers[4]);
+                        if (currentQ.scalable){
+                            if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                Parent root = FXMLLoader.load(getClass().getResource("Last.fxml"));
+                                ((Stage) lblPrompt.getScene().getWindow()).getOwner().getScene().setRoot(root);
+                                Stage stage = (Stage) lblPrompt.getScene().getWindow();
+                                stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]*(GameManager.dep+1)>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[0]>GameManager.savings && currentQ.cost[0]>GameManager.available){
+                            
+                            }
+                            else if (currentQ.cost[0]>GameManager.savings){
+                                radCard.selectedProperty().set(true);
+                                radCard.disableProperty().set(true);
+                            }
+                            else if (currentQ.cost[0]>GameManager.available){
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(true);
+                            }
+                            else{
+                                radCard.selectedProperty().set(false);
+                                radCard.disableProperty().set(false);
+                            }
+                        }
+                        if (currentQ.scalable){
+                            if (currentQ.cost[1]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[1]*(GameManager.dep+1)>GameManager.available){
+                                btn2.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[2]*(GameManager.dep+1)>GameManager.available){
+                                btn3.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[3]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[3]*(GameManager.dep+1)>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[4]*(GameManager.dep+1)>GameManager.savings && currentQ.cost[4]*(GameManager.dep+1)>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
+                        else{
+                            if (currentQ.cost[1]>GameManager.savings && currentQ.cost[1]>GameManager.available){
+                                btn2.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[2]>GameManager.savings && currentQ.cost[2]>GameManager.available){
+                                btn3.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[3]>GameManager.savings && currentQ.cost[3]>GameManager.available){
+                                btn4.disableProperty().set(true);
+                            }
+                            if (currentQ.cost[4]>GameManager.savings && currentQ.cost[4]>GameManager.available){
+                                btn5.disableProperty().set(true);
+                            }
+                        }
                         break;
                 }
                 qNum = i;
@@ -745,75 +1347,75 @@ public class UIManager implements Initializable {
     
     private void populate(){
         ObservableList temp = FXCollections.observableArrayList();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(0)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstJan.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(1)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstFeb.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(2)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstMar.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(3)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstApr.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(4)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstMay.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(5)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstJun.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(6)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstJul.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(7)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstAug.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(8)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstSep.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(9)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstOct.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(10)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstNov.getItems().setAll(temp);
         temp.clear();
-        temp.add("Prompt,Answer");
+        temp.add("Prompt: Answer");
         for (Storage str: GameManager.saved.get(11)){
-            temp.add(str.question+","+str.answer);
+            temp.add(str.question+": "+str.answer);
         }
         lstDec.getItems().setAll(temp);
         temp.clear();
@@ -825,16 +1427,30 @@ public class UIManager implements Initializable {
         lblFWellBeing.setText("Final Well Being: " + Integer.toString(GameManager.wellB));
         lblFSal.setText("Salary: $" + Integer.toString(GameManager.gross));
         lblFDeps.setText("Number of Dependents: " + Integer.toString(GameManager.dep));
-        if(GameManager.savings < 0){
-            lblEnd.setText("You ended in debt! Try again.");
-            lblFSavings.setTextFill(javafx.scene.paint.Color.RED);
-            lblFScore.setTextFill(javafx.scene.paint.Color.RED);
+        if(GameManager.month != 12){
+            String monthReached = "";
+            switch (GameManager.month){
+                case 1: monthReached = "January";break;
+                case 2: monthReached = "February";break;
+                case 3: monthReached = "March";break;
+                case 4: monthReached = "April";break;
+                case 5: monthReached = "May";break;
+                case 6: monthReached = "June";break;
+                case 7: monthReached = "July";break;
+                case 8: monthReached = "August";break;
+                case 9: monthReached = "September";break;
+                case 10: monthReached = "October";break;
+                case 11: monthReached = "November";break;
+                case 12: monthReached = "December";break;
+            }
+            lblEnd.setText("You ran out of money! Try again.");
+            lblFScore.setText("Last Month Reached: " + monthReached);
         }
     }
     
     @FXML
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         if (lblGross != null){
             try {
                 firstLoad();
@@ -843,12 +1459,20 @@ public class UIManager implements Initializable {
             }
         }
         
+        if (lblGoldLimit != null){
+            initCards();
+        }
+        
         if (radHouse != null){
             initCC();
         }
         
         if (lblPrompt != null){
-            runQuestions();
+            try {
+                runQuestions();
+            } catch (Exception ex) {
+                Logger.getLogger(UIManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (lblFSavings != null){
             try{

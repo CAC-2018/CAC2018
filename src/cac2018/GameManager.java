@@ -29,10 +29,23 @@ public class GameManager {
     public static int wellB;
     public static int mortRent;
     public static int tax;
-    public static int dep;
     public static int ess;
     public static int meds;
+    
     public static Boolean haveHouse;
+    public static int dep;
+    public static int index;
+    public static int housing;
+    
+    public static int cardStatus;
+    public static int[] cardChoice;
+    public static int[] goldCards;
+    public static int[] platCards;
+    
+    public static double interest;
+    public static int limit;
+    public static double available;
+    public static double bills;
     
     public static int month;
     public static Question[] questions;
@@ -49,9 +62,15 @@ public class GameManager {
             "Dental Hygenist","Professor","Nurse","Sportsperson","Scientist","Engineer","Lawyer","Doctor"};
         salaries = new int[]{40000,40000,45000,45000,50000,50000,55000,60000,60000,60000,65000,65000,70000,
             75000,75000,85000,90000,100000,125000,200000};
+        cardChoice = new int[]{1,1,2,2,2,2,3,3,3,3,4,4,4,5,5,6,6,7,8,11};
         houses = new int[]{81000,101500,122000,142000,162500,183000,203250,223500,244000,264250,285000,305000,325000,366000,407000,457000,478000,508000,549000};
         apartments = new int[]{400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800};
         deps = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12};
+    }
+    
+    public static void initCards(){
+        goldCards = new int[]{500,750,1000,1250,1750,2000,2500,3000,4000,5000,6000,7000,8000,10000,12500,15000,20000,22500,25000,30000,35000,38000,40000,45000,50000,60000,65000,75000};
+        platCards = new int[]{1000,1250,1500,1750,2250,2500,3000,3500,5000,6000,7000,8000,9000,12500,15000,20000,25000,30000,32500,40000,45000,50000,50000,55000,60000,70000,75000,90000};
     }
     
     public static void initQuestions(){
@@ -168,23 +187,36 @@ public class GameManager {
         return costs;
     }
     
-    public static void initGame(int ind, Boolean h, int hou, int d){
-        meds = 300 * (d+1);
-        ess = 800 * (d+1);
-        dep = d;
-        gross = Math.round((salaries[ind])/12);
-        haveHouse = h;
+    public static void initGame(){
+        meds = 300 * (dep+1);
+        ess = 800 * (dep+1);
+        
+        int choice = cardChoice[index];
+        
+        if (cardStatus == 1){
+            limit = goldCards[choice];
+            interest = 1.99;
+        }
+        else if (cardStatus == 2){
+            limit = platCards[choice];
+            interest = 2.99;
+        }
+        
+        available = limit;
+        bills = 0;
+
+        gross = Math.round((salaries[index])/12);
         net = gross - (1100*(dep+1));
         if (haveHouse){
-            mortIns(houses[hou]);
+            mortIns(houses[housing]);
             mortRent = mort;
             net -= mort + homeIns;
         }
         else{
-            mortRent = apartments[hou];
+            mortRent = apartments[housing];
             net -= mortRent;
         }
-        tax(salaries[ind]);
+        tax(salaries[index]);
         net -= tax;
         fixed = gross - net;
         savings = net;
@@ -192,6 +224,15 @@ public class GameManager {
         wellB = 0;
         month = 1;
         setMonthly();
+    }
+    
+    public static void crunchCredit(double pay){
+        bills -= pay;
+        available += pay;
+        if (available > limit){
+            available = limit;
+        }
+        bills = ((int) bills) * (1+(interest/100));
     }
     
     public static int tax(int inc){
