@@ -248,7 +248,7 @@ public class UIManager implements Initializable {
     @FXML
     private void handleBackCCButtonAction(ActionEvent event) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("StartScreen.fxml"));
-        btnPlay.getScene().setRoot(root);
+        btnToCredit.getScene().setRoot(root);
     }
     
     @FXML
